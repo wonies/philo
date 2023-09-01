@@ -6,6 +6,8 @@
 
 void	*thread_routine(void *arg)
 {
+	pthread_mutex_t *mutex = (pthread_mutex_t *)arg;
+	
 	pthread_t tid;
 	tid = pthread_self();
 
@@ -13,18 +15,21 @@ void	*thread_routine(void *arg)
 	printf("\ttid:%lx\n", tid);
 	while (i < 10)
 	{
+		pthread_mutex_lock(mutex);
 		printf("\tnew thread:%d\n", i);
 		i++;
+		pthread_mutex_ulock(mutex);
 		sleep(1);
 	}
 }
 
-
-
 int main()
 {
 	pthread_t thread;
-	pthread_create(&thread, NULL, thread_routine, NULL);
+	pthread_mutex_t mutex;
+	pthread_mutex_init(&mutex, NULL);
+	pthread_create(&thread, NULL, thread_routine, &mutex);
+	// pthread_detach(thread);
 	int i = 0;
 	printf("tid:%lx\n", pthread_self());
 	while (i < 5)
@@ -33,4 +38,6 @@ int main()
 		i++;
 		sleep(1);
 	}
+	pthread_join(thread,NULL);
+	pthread_mutex_destroy(&mutex);
 }
