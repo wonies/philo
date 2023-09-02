@@ -1,4 +1,5 @@
 #include "incs/philo.h"
+#define MAX_PHILOSOPHERS 0
 
 int	ft_lstsize(t_list *lst)
 {
@@ -13,10 +14,9 @@ int	ft_lstsize(t_list *lst)
 	return (size);
 }
 
-t_bool init_philo(t_philo *philo, char **av)
+t_bool init_philo(t_philo *philo, char **av, t_list *list)
 {
 	int	i;
-	t_list *list = NULL;
 	t_list *new;
 
 	i = 1;
@@ -28,16 +28,16 @@ t_bool init_philo(t_philo *philo, char **av)
 	}
 	i = 0;
 	(*philo).info = malloc(sizeof(t_info));
-	if (!((*philo).info))
-		return (FALSE);	
+	// if (!((*philo).info))
+	// 	return (FALSE);	
 	(*philo).info->num = ft_atoi(av[1]);
-	while (i++ < (*philo).info->num)
+	while (i < (*philo).info->num)
 	{
-		new = ft_lstnew();
+		printf("count: %d\n", i);
+		new = ft_lstnew((*philo).info->num);
 		ft_lstadd_back(&list, new);
+		i++;
 	}
-	printf("list size: %d\n", ft_lstsize(list));
-
 	(*philo).info->die = ft_atoi(av[2]);
 	(*philo).info->eat = ft_atoi(av[3]);
 	(*philo).info->sleep = ft_atoi(av[4]);
@@ -46,23 +46,84 @@ t_bool init_philo(t_philo *philo, char **av)
 	return (TRUE);
 }
 
-t_bool get_fork(t_philo *philo)
+void	*routine(void *arg)
 {
-	pthread_mutex_init(&(*philo).mutex, NULL);
-	pthread_create(&thread, NULL, thread_routine, &mutex);
+	t_list *list = (t_list  *)arg;
+	int	i;
+
+	i = 0;
+	printf("Enter------\n");
+	list->niche = pthread_self();
+	printf("--------\n");
+	printf("\town tid : %lx \n", (unsigned long)list->niche);
+	if (list->flag == 0)
+		printf("\t %lx : philosopher is eating\n", (unsigned long)list->niche);
+	else
+	{
+		if (list->not_eat == 0)
+		{
+			printf("\t %lx : philosopher is thinking\n", (unsigned long)list->niche);
+			list->not_eat = 1;
+			list->flag = 0;
+		}
+		else
+		{
+			printf("\t %lx : philosopher is sleeping\n", (unsigned long)list->niche);
+			list->not_eat = 0;
+			list->flag = 0;
+		}
+	}
+	return NULL;
+}
+
+t_bool get_fork(t_list *list)
+{	
+	int i = 0;
+	pthread_t threads[MAX_PHILOSOPHERS];
+	
+	printf("\tEnter get_fork func\n");
+	int size = ft_lstsize(list) - 1;
+	printf("size is : %d\n", size);
+	printf("list index : %d\n", list->index);
+	while (i < size)
+	{
+		if (i % 2 == 0)
+			list->flag = 0;
+		else
+			list->flag = 1;
+		printf("\tmutex init\n");
+		pthread_mutex_init(&list[i].fork, NULL);
+		printf("Enter 2 -----\n");
+		pthread_create(&list[i].niche, NULL, &routine, &list[i]);
+		threads[i] = list[i].niche;
+		// pthread_detach(list[i].niche);
+		i++;
+	}
+
+	i = 0;
+	while (i < list->index)
+	{
+		pthread_join(threads[i], NULL);
+		i++;
+	}
+
+	// create_philo(philo);
+	return 0;
 }
 
 
 int main(int ac, char **av)
 {
+	t_list list;
 	t_philo philo;
 	(void)ac;
 
-	if (!init_philo(&philo, av))
+	printf("\tPHILO START\n");
+	if (init_philo(&philo, av, &list) == FALSE)
 		return (1);
-	get_fork(&philo);
-	
+	printf("\tGET FORK!!\n");
+	get_fork(&list);
+	printf("\tBEFORE FREE\n");
 	free(philo.info);
 	return 0;
 }
-

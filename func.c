@@ -18,7 +18,7 @@ void	*thread_routine(void *arg)
 		pthread_mutex_lock(mutex);
 		printf("\tnew thread:%d\n", i);
 		i++;
-		pthread_mutex_ulock(mutex);
+		pthread_mutex_unlock(mutex);
 		sleep(1);
 	}
 }

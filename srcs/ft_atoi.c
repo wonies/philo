@@ -26,13 +26,16 @@ int	ft_atoi(const char *str)
 	return (sign * res);
 }
 
-t_list	*ft_lstnew()
+t_list	*ft_lstnew(int num)
 {
 	t_list	*new;
 
 	new = (t_list *)malloc(sizeof(t_list));
 	if (new == NULL)
 		return (NULL);
+	new->index = num;
+	new->flag = 0;
+	new->not_eat = 0;
 	new->next = NULL;
 	return (new);
 }

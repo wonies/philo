@@ -26,21 +26,24 @@ typedef struct s_list
 {
 	struct s_list	*prev;
 	struct s_list	*next;
+	t_info *info;
+	pthread_mutex_t fork;
+	pthread_t niche;
+	int		index;
+	int		flag;
+	int		not_eat;
 }	t_list;
 
 typedef struct s_philo
 {
 	t_info *info;
-	t_list *lists;
+	t_list *list;
 	pthread_t thread;
 	pthread_mutex_t mutex;
 } t_philo;
 
-
-
-
 int	ft_atoi(const char *str);
-t_list	*ft_lstnew(void);
+t_list	*ft_lstnew(int num);
 void	ft_lstadd_back(t_list **lst, t_list *new);
 
 # endif
