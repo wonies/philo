@@ -1,5 +1,5 @@
 #include "incs/philo.h"
-#define MAX_PHILOSOPHERS 0
+#define MAX_PHILOSOPHERS 1000
 
 int	ft_lstsize(t_list *lst)
 {
@@ -48,27 +48,25 @@ t_bool init_philo(t_philo *philo, char **av, t_list *list)
 
 void	*routine(void *arg)
 {
-	t_list *list = (t_list  *)arg;
-	int	i;
+	t_list *list = arg;
 
-	i = 0;
 	printf("Enter------\n");
-	list->niche = pthread_self();
+	// list->niche = pthread_self();
 	printf("--------\n");
-	printf("\town tid : %lx \n", (unsigned long)list->niche);
+	printf("\town tid : %d \n", list->index);
 	if (list->flag == 0)
-		printf("\t %lx : philosopher is eating\n", (unsigned long)list->niche);
+		printf("\t %d : philosopher is eating\n", list->index);
 	else
 	{
 		if (list->not_eat == 0)
 		{
-			printf("\t %lx : philosopher is thinking\n", (unsigned long)list->niche);
+			printf("\t %d : philosopher is thinking\n", list->index);
 			list->not_eat = 1;
 			list->flag = 0;
 		}
 		else
 		{
-			printf("\t %lx : philosopher is sleeping\n", (unsigned long)list->niche);
+			printf("\t %d : philosopher is sleeping\n", list->index);
 			list->not_eat = 0;
 			list->flag = 0;
 		}
@@ -79,7 +77,7 @@ void	*routine(void *arg)
 t_bool get_fork(t_list *list)
 {	
 	int i = 0;
-	pthread_t threads[MAX_PHILOSOPHERS];
+	// pthread_t threads[MAX_PHILOSOPHERS];
 	
 	printf("\tEnter get_fork func\n");
 	int size = ft_lstsize(list) - 1;
@@ -87,7 +85,9 @@ t_bool get_fork(t_list *list)
 	printf("list index : %d\n", list->index);
 	while (i < size)
 	{
-		if (i % 2 == 0)
+		list[i].index = i + 1;
+		printf("\tindex ; %d\n", list->index);
+		if ((i + 1) % 2 == 0)
 			list->flag = 0;
 		else
 			list->flag = 1;
@@ -95,15 +95,15 @@ t_bool get_fork(t_list *list)
 		pthread_mutex_init(&list[i].fork, NULL);
 		printf("Enter 2 -----\n");
 		pthread_create(&list[i].niche, NULL, &routine, &list[i]);
-		threads[i] = list[i].niche;
-		// pthread_detach(list[i].niche);
+		// threads[i] = list[i].niche;
+		pthread_detach(list[i].niche);
 		i++;
 	}
 
 	i = 0;
-	while (i < list->index)
+	while (i < size)
 	{
-		pthread_join(threads[i], NULL);
+		pthread_join(list[i].niche, NULL);
 		i++;
 	}
 

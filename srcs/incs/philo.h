@@ -32,6 +32,7 @@ typedef struct s_list
 	int		index;
 	int		flag;
 	int		not_eat;
+	int		num;
 }	t_list;
 
 typedef struct s_philo

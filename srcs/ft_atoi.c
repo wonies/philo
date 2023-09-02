@@ -33,10 +33,10 @@ t_list	*ft_lstnew(int num)
 	new = (t_list *)malloc(sizeof(t_list));
 	if (new == NULL)
 		return (NULL);
-	new->index = num;
 	new->flag = 0;
 	new->not_eat = 0;
 	new->next = NULL;
+	new->num = num;
 	return (new);
 }
 
