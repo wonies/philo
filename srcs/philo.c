@@ -46,31 +46,27 @@ t_bool init_philo(t_philo *philo, char **av, t_list *list)
 	return (TRUE);
 }
 
+void print_list_recursive(t_list* start_node, t_list* current_node) {
+    if (current_node == start_node) {
+        // 처음 노드로 돌아왔을 때 재귀 종료
+        return;
+    }
+
+    // 현재 노드의 데이터 출력
+    printf("Node data: %d\n", current_node->flag);
+
+    // 다음 노드로 이동
+    print_list_recursive(start_node, current_node->next);
+}
+
+
 void	*routine(void *arg)
 {
 	t_list *list = arg;
-
-	printf("Enter------\n");
-	// list->niche = pthread_self();
-	printf("--------\n");
-	printf("\town tid : %d \n", list->index);
-	if (list->flag == 0)
-		printf("\t %d : philosopher is eating\n", list->index);
-	else
-	{
-		if (list->not_eat == 0)
-		{
-			printf("\t %d : philosopher is thinking\n", list->index);
-			list->not_eat = 1;
-			list->flag = 0;
-		}
-		else
-		{
-			printf("\t %d : philosopher is sleeping\n", list->index);
-			list->not_eat = 0;
-			list->flag = 0;
-		}
-	}
+	
+	printf("start routine\n");
+	print_list_recursive(list, list->next);
+	printf("end routine\n");
 	return NULL;
 }
 
@@ -86,7 +82,8 @@ t_bool get_fork(t_list *list)
 	while (i < size)
 	{
 		list[i].index = i + 1;
-		printf("\tindex ; %d\n", list->index);
+		printf("while in index: %d\n", i);
+		printf("\tindex ; %d\n", list[i].index);
 		if ((i + 1) % 2 == 0)
 			list->flag = 0;
 		else
@@ -110,7 +107,6 @@ t_bool get_fork(t_list *list)
 	// create_philo(philo);
 	return 0;
 }
-
 
 int main(int ac, char **av)
 {

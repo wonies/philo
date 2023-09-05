@@ -35,8 +35,9 @@ t_list	*ft_lstnew(int num)
 		return (NULL);
 	new->flag = 0;
 	new->not_eat = 0;
-	new->next = NULL;
 	new->num = num;
+	new->prev = NULL;
+	new->next = NULL;
 	return (new);
 }
 
@@ -58,3 +59,25 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		(*lst) = temp;
 	}
 }
+
+
+// void ft_lstadd_back(t_list **lst, t_list *new)
+// {
+//     if (!lst || !new)
+//         return;
+
+//     if (!(*lst))
+//     {
+//         *lst = new;
+//         new->prev = NULL; // 새로운 노드는 첫 번째 노드이므로 이전 노드가 없습니다.
+//         return;
+//     }
+
+//     t_list *temp = *lst;
+//     while (temp->next)
+//         temp = temp->next;
+
+//     temp->next = new;
+//     new->prev = temp;
+// }
+
