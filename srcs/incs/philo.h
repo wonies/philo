@@ -46,5 +46,6 @@ typedef struct s_philo
 int	ft_atoi(const char *str);
 t_list	*ft_lstnew(int num);
 void	ft_lstadd_back(t_list **lst, t_list *new);
+void print_list(t_list *head);
 
 # endif

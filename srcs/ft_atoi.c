@@ -49,14 +49,33 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	if (!lst || !new)
 		return ;
 	else if (!(*lst))
+	{
 		(*lst) = new;
+		(*lst)->prev = *lst;
+		(*lst)->next = *lst;
+	}
 	else
 	{
 		while ((*lst)->next)
 			(*lst) = (*lst)->next;
 		(*lst)->next = new;
-		new->prev = temp;
+		new->next = temp;
+		temp->prev = new;
+		new->prev = *lst;
 		(*lst) = temp;
+	}
+}
+
+
+void print_list(t_list *head)
+{
+	if (!head)
+		return ;
+	t_list *cur = head;
+	while (cur != head)
+	{
+		printf("node data: %d\n", cur->index);
+		cur = cur->next;
 	}
 }
 
