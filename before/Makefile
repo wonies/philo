@@ -4,10 +4,10 @@ CC = CC
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
-HEADER	=	inc/philo.h
+HEADER	=	srcs/incs/philo.h
 
 SRCS = srcs/philo.c \
-srcs/init.c \
+srcs/ft_atoi.c \
 
 OBJS = $(SRCS:%.c=%.o)
 
