@@ -16,11 +16,11 @@ typedef enum e_bool
 typedef struct s_info
 {
 	int cnt;
-	int die;
-	int eat;
-	int sleep;
+	int	lifetime;
 	int eattime;
-	int	idx;
+	int naptime;
+	int option;
+	int	idx; 
 	pthread_mutex_t prints;
 	pthread_mutex_t sleeping;
 	pthread_mutex_t thinking;

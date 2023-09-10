@@ -19,11 +19,12 @@ t_bool	init_philo(t_list **list, char **av)
 	while (i++ < ft_atoi(av[1]))
 	{
 		new = ft_lstnew(list, ft_atoi(av[1]), i);
-		new->info->die = ft_atoi(av[2]);
-		new->info->eat = ft_atoi(av[3]);
-		new->info->sleep = ft_atoi(av[4]);
-		new->info->eattime = ft_atoi(av[5]);
-		insert_list(list, new);
+		new->info->lifetime = ft_atoi(av[2]);
+		new->info->eattime = ft_atoi(av[3]);
+		new->info->naptime = ft_atoi(av[4]);
+		new->info->option = ft_atoi(av[5]);
+		// insert_list(list, new);
+		ft_lstadd_back(list, new);
 	}
 	print_list(list);
 	return (1);
@@ -50,7 +51,7 @@ void	*routine(void *arg)
 	
 	double	difftime;
 
-	difftime = list->info->die - list->info->eat;
+	difftime = list->info->eattime - list->info->lifetime;
 	printf("diff time : {%f}\n", difftime);
 	int i = 0;
 	int idxx = list->info->idx;
@@ -68,6 +69,7 @@ void	*routine(void *arg)
 			pthread_mutex_lock(&(list->info->prints));
 			list->use = 1;
 			list->next->use = 1;
+			printf("\t %d %d philosopher has taken a fork\n", times,  list->info->idx);
 			printf("\t %d %d philosopher has taken a fork\n", times,  list->info->idx);
 			printf("\t %d %d philosopher is eating\n", times, list->info->idx);
 			pthread_mutex_unlock(&(list->info->prints));
@@ -143,7 +145,7 @@ void	*routine(void *arg)
 			}
 		}
 	}
-	times += list->info->eat;
+	times += list->info->eattime;
 	i++;
 	if (i == 10)
 		break ;

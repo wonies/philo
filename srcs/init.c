@@ -48,28 +48,43 @@ t_list	*ft_lstnew(t_list **list, int num, int idx)
 	return (new);
 }
 
+// #include <stdio.h>
+
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*temp;
 
+	printf("-----\n");
 	temp = *lst;
+	printf("add back\n");
 	if (!lst || !new)
+	{
+		printf("if 1\n");
 		return ;
+	}
 	else if (!(*lst))
 	{
+		printf("if 2 s\n");
 		(*lst) = new;
 		(*lst)->prev = *lst;
 		(*lst)->next = *lst;
+		printf("if 2 e\n");
 	}
 	else
 	{
+		printf("if 3 s\n");
 		while ((*lst)->next)
+		{
 			(*lst) = (*lst)->next;
+			if ((*lst) == temp)
+				break ;
+		}
 		(*lst)->next = new;
 		new->next = temp;
 		temp->prev = new;
 		new->prev = *lst;
 		(*lst) = temp;
+		printf("if 3 e\n");
 	}
 }
 
