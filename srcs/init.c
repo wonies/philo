@@ -88,7 +88,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	}
 }
 
-void insert_list(t_list** head, t_list *new_node)
+void insert_list(t_list** head, t_list *new_node
 {
     if (!new_node || !head)
 		return ;
@@ -105,6 +105,24 @@ void insert_list(t_list** head, t_list *new_node)
         (*head)->prev->next = new_node;
         (*head)->prev = new_node;
     }
+}
+
+static	void ft_lstadd(t_list **list, t_list *new)
+{
+	t_list	*head;
+	t_list	*tail;
+
+	if (*list)
+	{
+		head = *list;
+		tail = (*list)->prev;
+		tail->next = new;
+		new->next = head;
+		head->prev = new;
+		new->prev = tail;
+	}
+	else
+		*list = new;
 }
 
 int	ft_lstsize(t_list **lst)
