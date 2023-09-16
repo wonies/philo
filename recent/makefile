@@ -8,6 +8,9 @@ HEADER	=	inc/philo.h
 
 SRCS = srcs/philo.c \
 srcs/init.c \
+srcs/life.c \
+srcs/routine.c \
+srcs/setting.c \
 
 OBJS = $(SRCS:%.c=%.o)
 

@@ -1,23 +1,11 @@
-#include "incs/philo.h"
-#define MAX_PHILOSOPHERS 1000
+#include "../inc/philo.h"
+unsigned long long get_time(void);
 
-int	ft_lstsize(t_list *lst)
+
+t_bool	init_philo(t_list **list, char **av)
 {
-	int	size;
-
-	size = 0;
-	while (lst)
-	{
-		lst = lst->next;
-		size++;
-	}
-	return (size);
-}
-
-t_bool init_philo(t_philo *philo, char **av, t_list *list)
-{
-	int	i;
-	t_list *new;
+	t_list	*new;
+	int		i;
 
 	i = 1;
 	while (i < 6)
@@ -27,99 +15,244 @@ t_bool init_philo(t_philo *philo, char **av, t_list *list)
 		i++;
 	}
 	i = 0;
-	(*philo).info = malloc(sizeof(t_info));
-	// if (!((*philo).info))
-	// 	return (FALSE);	
-	(*philo).info->num = ft_atoi(av[1]);
-	while (i < (*philo).info->num)
+	// printf("av's atoi : [[%d]]\n", ft_atoi(av[1]));
+	while (i++ < ft_atoi(av[1]))
 	{
-		printf("count: %d\n", i);
-		new = ft_lstnew((*philo).info->num);
-		ft_lstadd_back(&list, new);
-		i++;
+		new = ft_lstnew(list, ft_atoi(av[1]), i);
+		new->info->lifetime = ft_atoi(av[2]);
+		new->info->eattime = ft_atoi(av[3]);
+		new->info->naptime = ft_atoi(av[4]);
+		new->info->option = ft_atoi(av[5]);
+		// insert_list(list, new);
+		ft_lstadd_back(list, new);
 	}
-	(*philo).info->die = ft_atoi(av[2]);
-	(*philo).info->eat = ft_atoi(av[3]);
-	(*philo).info->sleep = ft_atoi(av[4]);
-	(*philo).info->eattime = ft_atoi(av[5]);
-
-	return (TRUE);
+	print_list(list);
+	return (1);
 }
 
 void print_list_recursive(t_list* start_node, t_list* current_node) {
+
+    if (current_node == NULL) {
+        return; // 현재 노드가 NULL이면 종료
+    }
+	printf("recursive data: %d\n", current_node->info->idx);
+    print_list_recursive(start_node, current_node->next);
     if (current_node == start_node) {
-        // 처음 노드로 돌아왔을 때 재귀 종료
         return;
     }
-
-    // 현재 노드의 데이터 출력
-    printf("Node data: %d\n", current_node->flag);
-
-    // 다음 노드로 이동
-    print_list_recursive(start_node, current_node->next);
 }
 
+//모니터링
+//공유자원??
 
 void	*routine(void *arg)
 {
-	t_list *list = arg;
+	t_list *list = * (t_list **)arg;
 	
-	printf("start routine\n");
-	print_list_recursive(list, list->next);
-	printf("end routine\n");
+	double	difftime;
+
+	difftime = list->info->eattime - list->info->lifetime;
+	printf("diff time : {%f}\n", difftime);
+	int i = 0;
+	int idxx = list->info->idx;
+	int times = 0;
+	printf("\t list's idxx {%d}\n", idxx);
+	while (1)
+	{
+	if (list->info->idx % 2 != 0)
+	{
+		// printf("\tlist  ODD index [[[%d]]]\n", list->info->idx);
+		if (list->next->use == 0 && list->use == 0)
+		{
+			usleep(1000);
+			pthread_mutex_lock(&(list->fork));
+			pthread_mutex_lock(&(list->info->prints));
+			list->use = 1;
+			list->next->use = 1;
+			printf("\t %d %d philosopher has taken a fork\n", times,  list->info->idx);
+			printf("\t %d %d philosopher has taken a fork\n", times,  list->info->idx);
+			printf("\t %d %d philosopher is eating\n", times, list->info->idx);
+			pthread_mutex_unlock(&(list->info->prints));
+			pthread_mutex_unlock(&(list->fork));
+			list->use = 0;
+			list->next->use = 0;
+		}
+		else if ((list->next->use != 0 && list->use != 0) || (list->next->use != 0 && list->use == 0) || (list->next->use == 0 && list->use != 0))
+		{
+			if (list->status == 0)
+			{
+				//thinking = 자는 시간  - 먹는 시간
+				usleep(1000);
+				pthread_mutex_lock(&(list->info->sleeping));
+				pthread_mutex_lock(&(list->info->prints));
+				printf("\t\033[0;31m %d %d philosopher is sleeping\n\033[0m", times, list->info->idx);
+				pthread_mutex_unlock(&(list->info->prints));
+				pthread_mutex_unlock(&(list->info->sleeping));
+				list->status = 1;
+				list->use = 0;
+			}
+			else
+			{
+				usleep(10000);
+				pthread_mutex_lock(&(list->info->thinking));
+				pthread_mutex_lock(&(list->info->prints));
+				printf("\t\033[0;32m %d %d philosopher is thinking\n\033[0m", times, list->info->idx);
+				pthread_mutex_unlock(&(list->info->prints));
+				pthread_mutex_unlock(&(list->info->thinking));
+				list->status = 0;
+				list->use = 0;
+			}
+		}	
+	}
+	else if (list->info->idx % 2 == 0)
+	{
+		// printf("\tlist  EVEN index [[[%d]]]\n", list->info->idx);
+		if (list->next->use == 0 && list->use == 0)
+		{
+			usleep(1000*1000);
+			pthread_mutex_lock(&(list->fork));
+			pthread_mutex_lock(&(list->info->prints));
+			list->use = 1;
+			printf("\t\033[0;31m %d %d philosopher is sleeping\n\033[0m", times, list->info->idx);
+			pthread_mutex_unlock(&(list->info->prints));
+			pthread_mutex_unlock(&(list->fork));
+			list->status = 0;
+			list->use = 0;
+		}
+		else if ((list->next->use != 0 && list->use != 0) || (list->next->use != 0 && list->use == 0) || (list->next->use == 0 && list->use != 0))
+		{
+			if (list->status == 0)
+			{
+				usleep(1000*1000);
+				pthread_mutex_lock(&(list->info->sleeping));
+				pthread_mutex_lock(&(list->info->prints));
+				printf("\t\033[0;31m %d %d philosopher is sleeping\n\033[0m", times, list->info->idx);
+				pthread_mutex_unlock(&(list->info->prints));
+				pthread_mutex_unlock(&(list->info->sleeping));
+				list->use = 0;
+				list->status = 1;
+			}
+			else
+			{
+				usleep(1000*1000);
+				pthread_mutex_lock(&(list->info->thinking));
+				pthread_mutex_lock(&(list->info->prints));
+				printf("\t\033[0;32m %d %d philosopher is thinking\n\033[0m", times, list->info->idx);
+				pthread_mutex_unlock(&(list->info->prints));
+				pthread_mutex_unlock(&(list->info->thinking));
+				list->use = 0;
+				list->status = 0;
+			}
+		}
+	}
+	times += list->info->eattime;
+	i++;
+	if (i == 10)
+		break ;
+	}
+	// if (list->info->idx %)
+
 	return NULL;
+}	
+
+
+unsigned long long get_time(void)
+{
+	struct timeval starttime;
+
+	if (gettimeofday(&starttime, NULL) < 0)
+		return -1;
+	return ((starttime.tv_sec * 1000) + (starttime.tv_usec / 1000));
 }
 
-t_bool get_fork(t_list *list)
-{	
-	int i = 0;
-	// pthread_t threads[MAX_PHILOSOPHERS];
-	
-	printf("\tEnter get_fork func\n");
-	int size = ft_lstsize(list) - 1;
-	printf("size is : %d\n", size);
-	printf("list index : %d\n", list->index);
-	while (i < size)
-	{
-		list[i].index = i + 1;
-		printf("while in index: %d\n", i);
-		printf("\tindex ; %d\n", list[i].index);
-		if ((i + 1) % 2 == 0)
-			list->flag = 0;
-		else
-			list->flag = 1;
-		printf("\tmutex init\n");
-		pthread_mutex_init(&list[i].fork, NULL);
-		printf("Enter 2 -----\n");
-		pthread_create(&list[i].niche, NULL, &routine, &list[i]);
-		// threads[i] = list[i].niche;
-		pthread_detach(list[i].niche);
-		i++;
-	}
 
-	i = 0;
-	while (i < size)
-	{
-		pthread_join(list[i].niche, NULL);
-		i++;
-	}
+t_bool	get_fork(t_list **list)
+{
+	int	size;
+	t_list *cur = *list;
 
-	// create_philo(philo);
+	size = ft_lstsize(list);
+	printf("\tlist size : {%d}\n", size);
+	// pthread_mutex_init(*philo.prints, NULL);
+	while (1)
+	{
+		pthread_mutex_init(&cur->fork, NULL);
+		pthread_mutex_init(&cur->info->prints, NULL);
+		pthread_mutex_init(&cur->info->sleeping, NULL);
+		pthread_mutex_init(&cur->info->thinking, NULL);
+		cur = cur->next;
+		if (*list == cur)
+			break ;
+	}
+	t_list *cur1 = *list;
+	while (1)
+	{
+		printf("\tidx check in get-fork %d\n", cur1->info->idx);
+        if (pthread_create(&cur1->niche, NULL, &routine, &cur1) != 0)
+			printf("-----seg-------\n");
+		cur1 = cur1->next;
+		if (*list == cur1)
+			break ;
+	}
+	t_list *cur2 = *list;
+	while (1)
+	{
+		pthread_join(cur2->niche, NULL);
+		cur2 =cur2->next;
+		if (*list == cur2)
+			break ;
+	}
 	return 0;
 }
 
-int main(int ac, char **av)
+// t_bool	get_fork(t_list **list)
+// {
+// 	int	i;
+// 	int	size;
+
+// 	i = 0;
+// 	size = ft_lstsize(list);
+// 	printf("\tlist size : {%d}\n", size);
+// 	// pthread_mutex_init(*philo.prints, NULL);
+// 	while (i < size)
+// 	{
+// 		pthread_mutex_init(&(*list)[i].fork, NULL);
+// 		i++;
+// 	}
+// 	i = 0;
+// 	while (i < size)
+// 	{
+// 		// list[i]->info->idx = i + 1;
+// 		printf("idx check %d\n", list[i]->info->idx);
+//         if (pthread_create(&(list)[i]->niche, NULL, &routine, &list[i]) != 0)
+// 			printf("-----seg-------\n");
+
+//         // pthread_detach((*list)[i].niche);
+// 		// // pthread_mutex_init(&list[i]->fork, NULL);
+// 		// pthread_create(&list[i]->niche, NULL, &routine, list[i]);
+// 		// pthread_detach(list[i]->niche);
+// 		i++;
+// 	}
+// 	i = 0;
+// 	while (i < size)
+// 	{
+// 		pthread_join(list[i]->niche, NULL);
+// 		i++;
+// 	}
+// 	return 0;
+// }
+
+int	main(int ac, char **av)
 {
-	t_list list;
-	t_philo philo;
+	t_list	*list;
 	(void)ac;
 
+	list = NULL;
 	printf("\tPHILO START\n");
-	if (init_philo(&philo, av, &list) == FALSE)
+	if (init_philo(&list, av) == FALSE)
 		return (1);
-	printf("\tGET FORK!!\n");
+	printf("\tGET FORK\n");
 	get_fork(&list);
-	printf("\tBEFORE FREE\n");
-	free(philo.info);
-	return 0;
+	// free(*list.info);
+	return (0);
 }
