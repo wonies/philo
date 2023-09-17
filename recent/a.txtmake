@@ -1,0 +1,454 @@
+	PHILO START
+record init : {1694949854387} 
+	GET FORK
+		philo 1 is 0
+0 1 has taken a fork
+		philo 5 is 0
+		philo 6 is 0
+		philo 3 is 0
+0 1 has taken a fork
+		philo 2 is 0
+		philo 8 is 0
+0 8 has taken a fork
+prev list {19}
+0 8 has taken a fork
+		philo 9 is 0
+0 8 is eating
+		philo 10 is 0
+		philo 12 is 0
+0 9 has taken a fork
+		philo 4 is 0
+		philo 7 is 0
+0 9 has taken a fork
+		philo 13 is 0
+		philo 14 is 0
+0 14 has taken a fork
+0 14 has taken a fork
+0 1 is eating
+		philo 11 is 0
+		philo 15 is 1
+		philo 16 is 0
+0 6 has taken a fork
+0 6 has taken a fork
+0 6 is eating
+0 12 has taken a fork
+0 12 has taken a fork
+0 12 is eating
+idx: {{19}}
+		philo 17 is 0
+0 3 has taken a fork
+0 3 has taken a fork
+prev list {2}
+0 3 is eating
+0 14 is eating
+0 16 has taken a fork
+0 16 has taken a fork
+0 16 is eating
+0 17 has taken a fork
+0 17 has taken a fork
+		philo 18 is 1
+		philo 3 is 2
+200 3 is sleeping
+		philo 1 is 2
+		philo 6 is 2
+prev list {16}
+200 4 has taken a fork
+200 4 has taken a fork
+		philo 16 is 2
+200 4 is eating
+		philo 14 is 2
+200 14 is sleeping
+		philo 12 is 2
+200 12 is sleeping
+200 11 has taken a fork
+200 11 has taken a fork
+		philo 8 is 2
+200 8 is sleeping
+prev list {10}
+prev list {8}
+200 9 is eating
+200 2 has taken a fork
+200 2 has taken a fork
+200 2 is eating
+200 6 is sleeping
+200 17 is eating
+200 16 is sleeping
+200 15 has taken a fork
+200 15 has taken a fork
+prev list {14}
+200 13 has taken a fork
+200 13 has taken a fork
+prev list {12}
+200 13 is eating
+200 5 has taken a fork
+200 5 has taken a fork
+200 7 has taken a fork
+200 7 has taken a fork
+prev list {6}
+200 7 is eating
+200 15 is eating
+200 11 is eating
+200 1 is sleeping
+		philo 19 is 0
+202 19 has taken a fork
+202 19 has taken a fork
+prev list {18}
+202 19 is eating
+		philo 15 is 2
+400 15 is sleeping
+		philo 3 is 0
+400 10 has taken a fork
+400 10 has taken a fork
+400 3 is thinking
+		philo 3 is 0
+		philo 3 is 0
+		philo 9 is 2
+400 9 is sleeping
+		philo 7 is 2
+400 7 is sleeping
+		philo 1 is 0
+		philo 12 is 0
+		philo 17 is 2
+		philo 8 is 0
+		philo 6 is 0
+		philo 16 is 0
+prev list {4}
+		philo 14 is 0
+		philo 13 is 2
+		philo 11 is 2
+400 1 is thinking
+		philo 1 is 0
+400 17 is sleeping
+		philo 4 is 2
+		philo 2 is 2
+400 2 is sleeping
+		philo 1 is 0
+400 1 has taken a fork
+400 1 has taken a fork
+400 3 has taken a fork
+400 3 has taken a fork
+400 6 is thinking
+prev list {2}
+400 3 is eating
+		philo 6 is 0
+		philo 6 is 0
+400 12 is thinking
+		philo 12 is 0
+		philo 12 is 0
+400 12 has taken a fork
+400 12 has taken a fork
+400 12 is eating
+400 18 has taken a fork
+400 18 has taken a fork
+400 13 is sleeping
+400 14 is thinking
+400 11 is sleeping
+		philo 14 is 0
+		philo 14 is 0
+400 14 has taken a fork
+400 14 has taken a fork
+400 8 is thinking
+400 14 is eating
+400 4 is sleeping
+		philo 8 is 0
+		philo 8 is 0
+400 8 has taken a fork
+400 8 has taken a fork
+400 8 is eating
+400 10 is eating
+400 5 is eating
+400 16 is thinking
+		philo 16 is 0
+		philo 16 is 0
+400 16 has taken a fork
+400 16 has taken a fork
+400 16 is eating
+		philo 19 is 2
+402 19 is sleeping
+prev list {19}
+402 1 is eating
+402 18 is eating
+		philo 4 is 0
+		philo 3 is 2
+600 4 is thinking
+		philo 12 is 2
+		philo 15 is 0
+		philo 4 is 2
+		philo 9 is 0
+		philo 4 is 2
+		philo 16 is 2
+		philo 14 is 2
+		philo 2 is 0
+		philo 8 is 2
+		philo 11 is 0
+		philo 17 is 0
+		philo 7 is 0
+600 6 has taken a fork
+		philo 5 is 2
+		philo 10 is 2
+		philo 13 is 0
+600 6 has taken a fork
+600 6 is eating
+600 3 is sleeping
+600 15 is thinking
+		philo 15 is 2
+		philo 15 is 2
+600 12 is sleeping
+600 9 is thinking
+		philo 9 is 2
+		philo 9 is 2
+600 9 has taken a fork
+600 9 has taken a fork
+600 16 is sleeping
+prev list {8}
+600 9 is eating
+600 14 is sleeping
+600 8 is sleeping
+600 11 is thinking
+600 17 is thinking
+		philo 11 is 0
+		philo 11 is 0
+600 11 has taken a fork
+600 11 has taken a fork
+		philo 17 is 0
+		philo 17 is 0
+prev list {10}
+600 7 is thinking
+		philo 7 is 1
+		philo 7 is 1
+600 7 has taken a fork
+600 7 has taken a fork
+600 10 is sleeping
+600 15 has taken a fork
+600 15 has taken a fork
+prev list {14}
+600 15 is eating
+600 2 is thinking
+600 11 is eating
+		philo 2 is 0
+		philo 2 is 0
+600 5 is sleeping
+600 4 has taken a fork
+600 4 has taken a fork
+600 4 is eating
+600 13 is thinking
+		philo 13 is 2
+		philo 13 is 2
+600 13 has taken a fork
+600 13 has taken a fork
+prev list {12}
+600 13 is eating
+		philo 19 is 0
+602 19 is thinking
+		philo 19 is 0
+		philo 19 is 0
+		philo 18 is 2
+602 18 is sleeping
+602 17 has taken a fork
+602 17 has taken a fork
+prev list {16}
+602 17 is eating
+		philo 1 is 2
+602 19 has taken a fork
+602 19 has taken a fork
+prev list {18}
+602 19 is eating
+602 2 has taken a fork
+602 2 has taken a fork
+602 2 is eating
+602 1 is sleeping
+		philo 11 is 2
+800 11 is sleeping
+		philo 12 is 0
+		philo 9 is 2
+prev list {6}
+		philo 14 is 0
+		philo 4 is 2
+		philo 6 is 2
+		philo 5 is 2
+800 12 is thinking
+		philo 3 is 0
+		philo 16 is 0
+800 9 is sleeping
+		philo 13 is 2
+		philo 15 is 2
+		philo 8 is 0
+		philo 10 is 0
+800 7 is eating
+		philo 12 is 0
+		philo 12 is 0
+800 12 has taken a fork
+800 12 has taken a fork
+800 12 is eating
+800 6 is sleeping
+800 4 is sleeping
+800 5 is thinking
+800 3 is thinking
+		philo 5 is 2
+		philo 5 is 2
+800 5 has taken a fork
+800 5 has taken a fork
+		philo 3 is 0
+		philo 3 is 0
+800 3 has taken a fork
+800 3 has taken a fork
+prev list {4}
+800 16 is thinking
+800 13 is sleeping
+		philo 16 is 2
+		philo 16 is 2
+800 16 has taken a fork
+800 16 has taken a fork
+800 10 is thinking
+800 8 is thinking
+		philo 8 is 0
+		philo 8 is 0
+		philo 10 is 0
+		philo 10 is 0
+800 5 is eating
+800 14 is thinking
+		philo 14 is 2
+		philo 14 is 2
+800 15 is sleeping
+800 10 has taken a fork
+800 10 has taken a fork
+800 10 is eating
+800 14 has taken a fork
+800 14 has taken a fork
+800 14 is eating
+		philo 18 is 0
+802 18 is thinking
+		philo 18 is 0
+		philo 18 is 0
+		philo 19 is 2
+802 19 is sleeping
+		philo 17 is 2
+802 18 has taken a fork
+		philo 1 is 0
+		philo 2 is 2
+802 18 has taken a fork
+802 2 is sleeping
+802 18 is eating
+prev list {2}
+802 17 is sleeping
+802 3 is eating
+802 1 is thinking
+		philo 1 is 0
+		philo 1 is 0
+802 1 has taken a fork
+802 1 has taken a fork
+prev list {19}
+802 1 is eating
+802 16 is eating
+		philo 11 is 0
+		philo 9 is 0
+		philo 15 is 0
+		philo 7 is 2
+		philo 10 is 2
+		philo 5 is 2
+		philo 12 is 2
+		philo 6 is 0
+		philo 14 is 2
+		philo 13 is 0
+		philo 4 is 0
+1000 11 is thinking
+		philo 11 is 2
+		philo 11 is 2
+1000 11 has taken a fork
+1000 11 has taken a fork
+1000 9 is thinking
+1000 7 is sleeping
+		philo 9 is 0
+		philo 9 is 0
+1000 9 has taken a fork
+1000 9 has taken a fork
+prev list {10}
+1000 8 has taken a fork
+1000 8 has taken a fork
+prev list {8}
+1000 9 is eating
+1000 5 is sleeping
+1000 14 is sleeping
+1000 6 is thinking
+		philo 6 is 0
+		philo 6 is 0
+1000 6 has taken a fork
+1000 6 has taken a fork
+1000 6 is eating
+1000 13 is thinking
+1000 4 is thinking
+		philo 13 is 0
+		philo 13 is 0
+1000 15 is thinking
+		philo 4 is 0
+		philo 4 is 0
+		philo 15 is 2
+		philo 15 is 2
+1000 10 is sleeping
+1000 13 has taken a fork
+1000 13 has taken a fork
+prev list {12}
+1000 13 is eating
+1000 11 is eating
+1000 12 is sleeping
+		philo 1 is 2
+		philo 17 is 0
+		philo 3 is 2
+		philo 18 is 2
+1002 1 is sleeping
+		philo 19 is 0
+1002 15 has taken a fork
+1002 15 has taken a fork
+prev list {14}
+1002 15 is eating
+		philo 2 is 0
+1002 2 is thinking
+1002 3 is sleeping
+		philo 16 is 2
+		philo 2 is 0
+		philo 2 is 0
+1002 2 has taken a fork
+1002 2 has taken a fork
+1002 2 is eating
+1002 19 is thinking
+		philo 19 is 0
+		philo 19 is 0
+1002 19 has taken a fork
+1002 19 has taken a fork
+1002 16 is sleeping
+prev list {18}
+1002 17 is thinking
+		philo 17 is 0
+		philo 17 is 0
+1002 17 has taken a fork
+1002 17 has taken a fork
+1002 4 has taken a fork
+1002 4 has taken a fork
+1002 4 is eating
+prev list {16}
+1002 17 is eating
+1002 19 is eating
+1002 18 is sleeping
+		philo 6 is 2
+1200 6 is sleeping
+		philo 9 is 2
+1200 9 is sleeping
+1200 8 is eating
+		philo 14 is 0
+1200 14 is thinking
+		philo 14 is 0
+		philo 14 is 0
+		philo 10 is 0
+1200 10 is thinking
+		philo 10 is 0
+		philo 10 is 0
+1200 10 has taken a fork
+1200 10 has taken a fork
+		philo 12 is 0
+1200 12 is thinking
+		philo 12 is 0
+		philo 12 is 0
+		philo 7 is 0
+1200 7 is thinking
+		philo 7 is 0
+		p

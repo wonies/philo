@@ -12,6 +12,9 @@ t_bool	mutex_init(t_list **list)
 	while (i < cur->info->cnt)
 	{
 		pthread_mutex_init(&cur->fork, NULL);
+		// printf("\t\tshow me the seg\n");
+		pthread_mutex_init(&cur->active, NULL);
+		//printf("\t\tshow me the seg222\n");
 		cur = cur->next;
 		i++;
 		if (*list == cur)
@@ -49,14 +52,17 @@ t_bool	thread(t_list **list)
 	i = 0;
 	while (i < cur->info->cnt)
 	{
-		printf("\tindex : {%d}\n", cur->info->idx);
-		// if (cur->info->idx % 2 == 0)
-		// 	usleep(1000);
-		pthread_create(&cur->niche, NULL, &routine, &cur);
+		if (cur == (*list)->prev && cur->info->cnt % 2 != 0)
+		{
+			printf("idx: {{%d}}\n", cur->info->idx);
+			usleep(cur->info->eattime * 1000);
+		}
+			// moniterlife(cur->info->eattime + cur->info->eattime + cur->info->naptime);
+		pthread_create(&cur->niche, NULL, &routine, cur);
 		cur = cur->next;
 		i++;
-		if (*list == cur)
-			break ;
+		// if (*list == cur)
+		// 	break ;
 		// if (*list == cur)
 		// {
 		// 	cur->share->record += cur->info->lifetime;

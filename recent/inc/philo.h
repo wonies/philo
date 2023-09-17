@@ -7,6 +7,17 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+// #define STARVE 
+// #define EAT
+// #define SLEEP
+
+typedef enum e_status
+{
+	STARVE = 0,
+	EAT	= 1,
+	SLEEP = 2,
+} t_status;
+
 typedef enum e_bool
 {
 	FALSE,
@@ -24,6 +35,7 @@ typedef struct s_info
 	t_bool			lock;
 	t_bool			moniter;
 	unsigned long long	taken;
+	t_status		status;
 } t_info;
 
 typedef struct s_philo
@@ -44,8 +56,8 @@ typedef struct s_list
 	struct s_list	*next;
 	pthread_t 		niche;
 	pthread_mutex_t fork;
+	pthread_mutex_t	active;
 	t_info			*info;
-	int				status;
 	t_philo			*share;
 }	t_list;
 
@@ -62,5 +74,6 @@ unsigned long long get_time(void);
 void	*routine(void *arg);
 t_bool	init_philo(int ac, char **av, t_list **list);
 t_bool	get_fork(t_list **list);
+void	moniterlife(unsigned long long times);
 
 # endif

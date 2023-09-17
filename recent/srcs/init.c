@@ -27,6 +27,7 @@ static	void	put_info(int ac, char **av, t_list **list)
 		new->info->eattime = ft_atoi(av[3]);
 		new->info->naptime = ft_atoi(av[4]);
 		new->info->taken = get_time();
+		new->info->status = 0;
 		if (ac == 6)
 			new->info->option = ft_atoi(av[5]);
 		else
