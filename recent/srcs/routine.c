@@ -3,7 +3,7 @@
 void	mutex(t_list *list, int onoff);
 void	*routine(void *arg);
 void	sleeps(t_list *list, int nrd);
-void	moniterlife(unsigned long long times);
+// void	moniterlife(t_list *list, unsigned long long times);
 void	think(t_list *list, int nrd);
 
 t_bool	even_odd(int n)
@@ -16,23 +16,30 @@ t_bool	even_odd(int n)
 }
 
 void	print_status(t_list *list, int nrd, int behaivor)
-{
+{	
+	unsigned long long begins;
+
 	if (behaivor == 0)
 	{
 		pthread_mutex_lock(&(list->share->prints));
-		printf("%llu %d has taken a fork\n", get_time() - list->share->record, nrd);
-		printf("%llu %d has taken a fork\n", get_time() - list->share->record, nrd);
+		begins = get_time() - list->share->record;
+		// printf("%llu %d has taken a fork\n", get_time() - list->share->record, nrd);
+		// printf("%llu %d has taken a fork\n", get_time() - list->share->record, nrd);
+		printf("%llu %d has taken a fork\n", begins, nrd);
+		printf("%llu %d has taken a fork\n", begins, nrd);
 		pthread_mutex_unlock(&(list->share->prints));
 	}
 	else if (behaivor == 1)
 	{
+		begins = get_time() - list->share->record;
 		pthread_mutex_lock(&(list->share->prints));
+		//died(list, begins);
 		printf("%llu %d is eating\n", get_time() - list->share->record, nrd);
 		pthread_mutex_unlock(&(list->share->prints));
 	}
 }
 
-void	eat(t_list *list, int nrd)
+t_bool	eat(t_list *list, int nrd)
 {
 	printf("\t\tphilo %d is %d\n", nrd, list->info->status);
 	if (nrd % 2 != 0)
@@ -54,12 +61,16 @@ void	eat(t_list *list, int nrd)
 		pthread_mutex_lock(&(list->active));
 		list->info->status = EAT;
 		pthread_mutex_unlock(&(list->active));
-		moniterlife(list->info->eattime);
+		list->info->taken = get_time();
+		//moniterlife(list, list->info->eattime);
+		if (moniterlife(list, list->info->eattime))
+			return 1;
 		mutex(list->next, 0);
 		mutex(list, 0);
 		pthread_mutex_lock(&(list->active));
 		list->info->status = SLEEP;
 		pthread_mutex_unlock(&(list->active));
+		return 0;
 	}
 	else 
 	{
@@ -89,12 +100,18 @@ void	eat(t_list *list, int nrd)
 		pthread_mutex_lock(&(list->active));
 		list->info->status = EAT;
 		pthread_mutex_unlock(&(list->active));
-		moniterlife(list->info->eattime);
+		if (moniterlife(list, list->info->eattime))
+		{
+			pthread_mutex_lock(&(list->fork));
+			pthread_mutex_lock(&(list->next->fork));
+			return 1;
+		}
 		mutex(list, 0);
 		mutex(list->next, 0);
 		pthread_mutex_lock(&(list->active));
 		list->info->status = SLEEP;
 		pthread_mutex_unlock(&(list->active));
+		return 0;
 	}
 	// mutex(list, 1);
 	// print_status(list, nrd, 0);
@@ -117,7 +134,7 @@ void	sleeps(t_list *list, int nrd)
 	printf("%llu %d is sleeping\n", get_time() - list->share->record, nrd);
 	pthread_mutex_unlock(&(list->share->prints));
 	// usleep(list->info->naptime * 1000);
-	moniterlife(list->info->naptime);
+	moniterlife(list, list->info->naptime);
 	pthread_mutex_lock(&(list->active));
 	list->info->status = STARVE;
 	pthread_mutex_unlock(&(list->active));
@@ -159,9 +176,10 @@ void	eventable(t_list *list, int nrd)
 		// 	usleep(list->info->eattime * 1000);	
 		// 	// printf("\t\tphilo %d wait e\n", nrd);
 		// }
-		while (1)
+	while (1)
 	{
-		eat(list, nrd);
+		if (eat(list, nrd))
+			break; 
 		think(list, nrd);
 		// sleeps(list, nrd);
 		// think(list, nrd);
@@ -227,7 +245,6 @@ void	mutex(t_list *list, int onoff)
 	if (onoff == 1)
 	{
 		pthread_mutex_lock(&(list->fork));
-	
 		//pthread_mutex_lock(&(list->share->prints));
 		// list->info->moniter = 1;
 	}
@@ -242,24 +259,60 @@ void	mutex(t_list *list, int onoff)
 	}
 }
 
-void	moniterlife(unsigned long long times)
+t_bool	moniterlife(t_list *list, unsigned long long times)
 {
 	unsigned long long cur;
+	unsigned long long death;
 
+	(void )list;
 	cur = get_time();
+	death = list->info->taken;
 	while (1)
 	{
+		if (died(list, death))
+		{
+			dead(list);
+			return (1);
+		}
 		if (get_time() - cur >= times)
 			break ;
 		usleep(256);
 	}
+	return (0);
 }
 
-/* 
-경쟁조건 : 
-1. 모든 필로는 자기 포크에 대한 우선권이 있음 
-2. 한번에 같이 드는 상황
-3. 평화주의자 code 
-4. 홀수는 옆에 놈 거 들고 
-5. 짝수는 자기거먼저든다.
-*/
+
+t_bool	died(t_list *list, unsigned long long timz)
+{
+	// unsigned long long deadtime;
+	unsigned long long lives;
+
+	// pthread_mutex_lock(&(list->share->prints));
+	// 	
+	// pthread_mutex_unlock(&(list->share->prints));
+//	deadtime = get_time();
+	lives = list->info->lifetime;
+	if (get_time() - timz >= lives)
+	{
+		pthread_mutex_lock(&(list->share->prints));
+			printf("\t\t if its in ->>1234 \t\t\n");
+		printf("%d is died\n", list->info->idx);
+		pthread_mutex_unlock(&(list->share->prints));
+		return (1);
+	}
+	return (0);
+}
+
+t_bool	dead(t_list *list)
+{
+	// if (list->info->status == EAT)
+	// {
+	// 	pthread_mutex_unlock(&(list->fork));
+	// 	pthread_mutex_unlock(&(list->next->fork));
+	// }
+	pthread_mutex_lock(&(list->active));
+	list->info->status = DEATH;
+	pthread_mutex_unlock(&(list->active));
+
+	return 1;
+}

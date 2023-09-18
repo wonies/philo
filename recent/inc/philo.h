@@ -13,9 +13,10 @@
 
 typedef enum e_status
 {
-	STARVE = 0,
-	EAT	= 1,
-	SLEEP = 2,
+	STARVE,
+	EAT,
+	SLEEP,
+	DEATH,
 } t_status;
 
 typedef enum e_bool
@@ -74,6 +75,7 @@ unsigned long long get_time(void);
 void	*routine(void *arg);
 t_bool	init_philo(int ac, char **av, t_list **list);
 t_bool	get_fork(t_list **list);
-void	moniterlife(unsigned long long times);
-
+t_bool	moniterlife(t_list *list, unsigned long long times);
+t_bool	dead(t_list *list);
+t_bool	died(t_list *list, unsigned long long timz);
 # endif

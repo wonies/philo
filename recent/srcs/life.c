@@ -80,10 +80,24 @@ t_bool	thread(t_list **list)
 
 	cur = *list;
 	// pthread_mutex_lock((&(*list)->share->circle));
-	// i = 0;
+	//i = 0;
 	thread_odd(cur);
 	cur = *list;
 	thread_even(cur->next);
+	cur = *list;
+	while (1)
+	{
+		pthread_mutex_lock(&(cur->active));
+		if (cur->info->status == DEATH)
+		{
+			pthread_mutex_lock(&(cur->share->prints));
+			printf("\t\t---------------\t\t\n");
+			pthread_mutex_unlock(&(cur->share->prints));
+			pthread_mutex_unlock(&(cur->active));
+			break ;
+		}
+		pthread_mutex_unlock(&(cur->active));
+	}
 	// while (i < cur->info->cnt)
 	// {
 	// 	if (cur == (*list)->prev && cur->info->cnt % 2 != 0)
