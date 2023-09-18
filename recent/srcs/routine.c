@@ -40,25 +40,38 @@ void	eat(t_list *list, int nrd)
 		mutex(list->next, 1);
 		print_status(list, nrd, 0);
 		mutex(list, 1);
-		printf("prev list {%d}\n", list->prev->info->idx);
+		// printf("prev list {%d}\n", list->prev->info->idx);
 		if (list->prev->info->status == STARVE && list->next->info->status == SLEEP)
 		{
 			// && list->next->info->status == SLEEP
+			printf("\t %d's status && %d status\n", nrd, list->next->info->status);
 			printf("\t\tphilo %d is putting down\n", nrd);
 			mutex(list, 0);
 			usleep(5000);
 			mutex(list, 1);
 		}
 		print_status(list, nrd, 1);
+		pthread_mutex_lock(&(list->active));
+		list->info->status = EAT;
+		pthread_mutex_unlock(&(list->active));
 		moniterlife(list->info->eattime);
 		mutex(list->next, 0);
 		mutex(list, 0);
+		pthread_mutex_lock(&(list->active));
+		list->info->status = SLEEP;
+		pthread_mutex_unlock(&(list->active));
 	}
 	else 
 	{
 		mutex(list, 1);
 		print_status(list, nrd, 0);
 		mutex(list->next, 1);
+		// if (list->prev->info->status == STARVE && list->next->info->status == STARVE)
+		// {
+		// 	mutex(list, 0);
+		// 	usleep(5000);
+		// 	mutex(list, 1);
+		// }
 		// if (list->prev->info->status == STARVE && list->next->info->status == EAT)
 		// {
 		// 	// && list->next->info->status == SLEEP
@@ -73,9 +86,15 @@ void	eat(t_list *list, int nrd)
 		// 	return ;
 		// }
 		print_status(list, nrd, 1);
+		pthread_mutex_lock(&(list->active));
+		list->info->status = EAT;
+		pthread_mutex_unlock(&(list->active));
 		moniterlife(list->info->eattime);
 		mutex(list, 0);
 		mutex(list->next, 0);
+		pthread_mutex_lock(&(list->active));
+		list->info->status = SLEEP;
+		pthread_mutex_unlock(&(list->active));
 	}
 	// mutex(list, 1);
 	// print_status(list, nrd, 0);
@@ -87,25 +106,6 @@ void	eat(t_list *list, int nrd)
 	// mutex(list, 0);
 	sleeps(list, nrd);
 }
-
-// void	eating(t_list *list, int nrd)
-// {
-// 	pthread_mutex_lock(&(list->fork));
-// 	pthread_mutex_lock(&(list->share->prints));
-// 	printf("%llu %d has taken a fork\n", get_time() - list->share->record, nrd);
-// 	pthread_mutex_unlock(&(list->share->prints));
-// 	pthread_mutex_lock(&(list->share->prints));
-// 	printf("%llu %d has taken a fork\n", get_time() - list->share->record, nrd);
-// 	pthread_mutex_unlock(&(list->share->prints));
-// 	pthread_mutex_lock(&(list->next->fork));
-// 	pthread_mutex_unlock(&(list->next->fork));
-// 	usleep(list->info->eattime * 1000);
-// 	moniterlife(list->info->eattime);
-// 	pthread_mutex_unlock(&(list->fork));
-// 	pthread_mutex_lock(&(list->share->prints));
-// 	printf("%llu %d is eating\n", get_time() - list->share->record, nrd);
-// 	pthread_mutex_unlock(&(list->share->prints));
-// }
 
 void	sleeps(t_list *list, int nrd)
 {
@@ -136,7 +136,7 @@ void	think(t_list *list, int nrd)
 	pthread_mutex_lock(&(list->share->prints));
 	printf("%llu %d is thinking\n", get_time() - list->share->record, nrd);
 	pthread_mutex_unlock(&(list->share->prints));
-	printf("\t\tphilo %d is %d\n", nrd, list->info->status);
+	// printf("\t\tphilo %d is %d\n", nrd, list->info->status);
 	//moniterlife(thinktime);
 
 	//usleep((list->info->lifetime - (list->info->eattime + list->info->naptime)) * 1000);
@@ -227,9 +227,7 @@ void	mutex(t_list *list, int onoff)
 	if (onoff == 1)
 	{
 		pthread_mutex_lock(&(list->fork));
-		pthread_mutex_lock(&(list->active));
-		list->info->status = EAT;
-		pthread_mutex_unlock(&(list->active));
+	
 		//pthread_mutex_lock(&(list->share->prints));
 		// list->info->moniter = 1;
 	}
@@ -239,9 +237,7 @@ void	mutex(t_list *list, int onoff)
 		// pthread_mutex_unlock(&(list->share->prints));
 		
 		pthread_mutex_unlock(&(list->fork));
-		pthread_mutex_lock(&(list->active));
-		list->info->status = SLEEP;
-		pthread_mutex_unlock(&(list->active));
+		
 		// list->info->moniter = 0;
 	}
 }
