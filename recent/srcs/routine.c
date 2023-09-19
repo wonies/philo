@@ -2,7 +2,7 @@
 
 void	mutex(t_list *list, int onoff);
 void	*routine(void *arg);
-void	sleeps(t_list *list, int nrd);
+t_bool	sleeps(t_list *list, int nrd);
 // void	moniterlife(t_list *list, unsigned long long times);
 void	think(t_list *list, int nrd);
 
@@ -44,6 +44,8 @@ t_bool	eat(t_list *list, int nrd)
 	printf("\t\tphilo %d is %d\n", nrd, list->info->status);
 	if (nrd % 2 != 0)
 	{
+		list->info->taken = get_time();
+		printf("\t\t%llu is last taken time \n", list->info->taken);
 		mutex(list->next, 1);
 		print_status(list, nrd, 0);
 		mutex(list, 1);
@@ -61,10 +63,13 @@ t_bool	eat(t_list *list, int nrd)
 		pthread_mutex_lock(&(list->active));
 		list->info->status = EAT;
 		pthread_mutex_unlock(&(list->active));
-		list->info->taken = get_time();
 		//moniterlife(list, list->info->eattime);
 		if (moniterlife(list, list->info->eattime))
+		{
+			pthread_mutex_unlock(&(list->next->fork));
+			pthread_mutex_unlock(&(list->fork));
 			return 1;
+		}
 		mutex(list->next, 0);
 		mutex(list, 0);
 		pthread_mutex_lock(&(list->active));
@@ -102,8 +107,8 @@ t_bool	eat(t_list *list, int nrd)
 		pthread_mutex_unlock(&(list->active));
 		if (moniterlife(list, list->info->eattime))
 		{
-			pthread_mutex_lock(&(list->fork));
-			pthread_mutex_lock(&(list->next->fork));
+			pthread_mutex_unlock(&(list->fork));
+			pthread_mutex_unlock(&(list->next->fork));
 			return 1;
 		}
 		mutex(list, 0);
@@ -121,10 +126,12 @@ t_bool	eat(t_list *list, int nrd)
 	// moniterlife(list->info->eattime);
 	// mutex(list->next, 0);
 	// mutex(list, 0);
-	sleeps(list, nrd);
+	
+	if (sleeps(list, nrd))
+		return 1;
 }
 
-void	sleeps(t_list *list, int nrd)
+t_bool	sleeps(t_list *list, int nrd)
 {
 	printf("\t\tphilo %d is %d\n", nrd, list->info->status);
 	// pthread_mutex_lock(&(list->active));
@@ -134,11 +141,13 @@ void	sleeps(t_list *list, int nrd)
 	printf("%llu %d is sleeping\n", get_time() - list->share->record, nrd);
 	pthread_mutex_unlock(&(list->share->prints));
 	// usleep(list->info->naptime * 1000);
-	moniterlife(list, list->info->naptime);
+	if (moniterlife(list, list->info->naptime))
+		return 1;
 	pthread_mutex_lock(&(list->active));
 	list->info->status = STARVE;
 	pthread_mutex_unlock(&(list->active));
 	//think(list, nrd);
+	return 0;
 }
 
 void	think(t_list *list, int nrd)
@@ -281,7 +290,6 @@ t_bool	moniterlife(t_list *list, unsigned long long times)
 	return (0);
 }
 
-
 t_bool	died(t_list *list, unsigned long long timz)
 {
 	// unsigned long long deadtime;
@@ -313,6 +321,5 @@ t_bool	dead(t_list *list)
 	pthread_mutex_lock(&(list->active));
 	list->info->status = DEATH;
 	pthread_mutex_unlock(&(list->active));
-
 	return 1;
 }
