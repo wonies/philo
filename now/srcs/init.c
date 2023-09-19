@@ -21,14 +21,14 @@ static	void	put_info(int ac, char **av, t_list **list)
 	init_share(share);
 	while (i++ < ft_atoi(av[1]))
 	{
-		new = ft_lstnew(ft_atoi(av[1]), i);
-		new->info->lifetime = ft_atoi(av[2]);
-		new->info->eattime = ft_atoi(av[3]);
-		new->info->naptime = ft_atoi(av[4]);
+		new = ft_lstnew((ULL)ft_atoi(av[1]), i);
+		new->info->lifetime = (ULL)ft_atoi(av[2]);
+		new->info->eattime = (ULL)ft_atoi(av[3]);
+		new->info->naptime = (ULL)ft_atoi(av[4]);
 		new->info->taken = get_time();
 		new->info->status = 0;
 		if (ac == 6)
-			new->info->option = ft_atoi(av[5]);
+			new->info->option = (ULL)ft_atoi(av[5]);
 		else
 			new->info->option = -1;
 		new->share = share;

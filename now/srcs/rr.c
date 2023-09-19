@@ -68,7 +68,7 @@ t_bool    moniterlife(t_list *list, ULL times)
         if (died(list, death))
         {
             printf("\t\tdeath time : %llu\n\n", get_time() - death);
-            dead(list);
+            // dead(list);
             return (1);
         }
         if (get_time() - cur >= times)
@@ -122,7 +122,7 @@ t_bool  eveneat(t_list *list, int nrd)
     {
         printf("\t\t----ORDER---%d\n", list->info->idx);
         pthread_mutex_unlock(&(list->fork));
-        dead(list);
+        // dead(list);
         return 1;
     }
     printf("\t\tlast taken : %llu %d\n", get_time() -list->info->taken, list->info->idx);
@@ -131,7 +131,7 @@ t_bool  eveneat(t_list *list, int nrd)
     {
         printf("\t\t----ORDER---%d\n", list->info->idx);
         pthread_mutex_unlock(&(list->fork));
-        dead(list);
+        // dead(list);
         return 1;
     }
     print_status(list, nrd, 0);
@@ -152,7 +152,7 @@ t_bool  eveneat(t_list *list, int nrd)
     {
         // pthread_mutex_unlock(&(list->next->fork));
         printf("\t\t----ORDER---%d\n", list->info->idx);
-        dead(list);
+        // dead(list);
         return 1;
     }
     status(list, SLEEP);
@@ -169,16 +169,16 @@ t_bool  oddeat(t_list *list, int nrd)
     {
         printf("\t\t----ORDER---%d\n", list->info->idx);
         pthread_mutex_unlock(&(list->next->fork));
-        dead(list);
+        // dead(list);
         return 1;
     }
     mutex(list->next, 1);
     print_status(list, nrd, 0);
-     if (died(list, list->info->taken))
+    if (died(list, list->info->taken))
     {
         printf("\t\t----ORDER---%d\n", list->info->idx);
         pthread_mutex_unlock(&(list->fork));
-        dead(list);
+        // dead(list);
         return 1;
     }
     mutex(list, 1);
@@ -204,7 +204,7 @@ t_bool  oddeat(t_list *list, int nrd)
     {
         // pthread_mutex_unlock(&(list->next->fork));
         printf("\t\t----ORDER---%d\n", list->info->idx);
-        dead(list);
+        // dead(list);
         return 1;
     }
     status(list, SLEEP);
@@ -216,11 +216,11 @@ t_bool    eat(t_list *list, int nrd)
 {
     if (nrd % 2 != 0)
     {
-         if (died(list, list->info->taken))
+        if (died(list, list->info->taken))
         {
             printf("\t\t----ORDER---%d\n", list->info->idx);
             pthread_mutex_unlock(&(list->fork));
-            dead(list);
+            // dead(list);
             return 1;
         }
         if (oddeat(list, nrd))
@@ -228,11 +228,11 @@ t_bool    eat(t_list *list, int nrd)
     }
     else
     {
-         if (died(list, list->info->taken))
+        if (died(list, list->info->taken))
         {
             printf("\t\t----ORDER---%d\n", list->info->idx);
             pthread_mutex_unlock(&(list->fork));
-            dead(list);
+            // dead(list);
             return 1;
         }
         if (eveneat(list, nrd))
@@ -253,10 +253,28 @@ void	table(t_list *list, int nrd)
 	}
 }
 
+void    onephilo(t_list *list)
+{
+    ULL cur;
+    ULL printtimes;
+    
+    cur = get_time();
+    printtimes = cur - list->info->taken; 
+    pthread_mutex_lock(&(list->share->prints));
+    printf("%llu %d has taken a fork", printtimes, list->info->idx);
+    pthread_mutex_unlock(&(list->share->prints));
+    died(list, list->info->lifetime);
+}
+
 void	*routine(void *arg)
 {
 	t_list *list = (t_list *)arg;
 
-	table(list, list->info->idx);
+	if (list->info->cnt == 1)
+	{
+		onephilo(list);
+        return (NULL);
+	}
+    table(list, list->info->idx);
 	return (NULL);
 }

@@ -72,8 +72,6 @@ t_bool	thread(t_list **list)
 	// int		i;
 
 	cur = *list;
-	// pthread_mutex_lock((&(*list)->share->circle));
-	//i = 0;
 	thread_odd(cur);
 	cur = *list;
 	thread_even(cur->next);
