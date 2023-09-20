@@ -41,6 +41,8 @@ t_bool	init_philo(int ac, char **av, t_list **list)
 	int		i;
 
 	i = 1;
+	if (av[1] == '0')
+		return (0);
 	if (ac != 5 && ac != 6)
 		return FALSE;
 	while (i < ac)

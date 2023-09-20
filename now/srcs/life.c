@@ -38,6 +38,11 @@ t_bool	thread_join(t_list **list)
 void	thread_odd(t_list *cur)
 {
 	int	i = 1;
+	if (cur->info->cnt == 1)
+	{
+		pthread_create(&cur->niche, NULL, &routine, cur);
+		return ;
+	}
 	while (i < cur->info->cnt)
 	{
 		printf("starting philo %d\n", i);
@@ -57,7 +62,7 @@ void	thread_even(t_list *cur)
 		i += 2;
 		cur = cur->next->next;
 	}
-	if (cur->info->cnt % 2 != 0)
+	if (cur->info->cnt > 1 && cur->info->cnt % 2 != 0)
 	{
 		printf("starting philo %d\n", i - 1);
 		cur = cur->prev;

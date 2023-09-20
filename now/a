@@ -1,0 +1,9 @@
+	PHILO START
+	GET FORK
+starting philo 1
+cur time : 1695197645977
+basic time : 1695197645772 
+printtime : 205
+205 1 has taken a fork		died time : 205 	order : 1
+205 1 is died
+		---------------		
