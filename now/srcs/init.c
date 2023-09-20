@@ -8,6 +8,7 @@ static void		init_share(t_philo *share)
 	share->times = 0;
 	share->dead = 0;
 	share->record = get_time();
+	share->opttotal = 0;
 }
 
 static	void	put_info(int ac, char **av, t_list **list)
@@ -28,7 +29,10 @@ static	void	put_info(int ac, char **av, t_list **list)
 		new->info->taken = get_time();
 		new->info->status = 0;
 		if (ac == 6)
+		{
 			new->info->option = (ULL)ft_atoi(av[5]);
+			new->info->optown = 0;
+		}
 		else
 			new->info->option = -1;
 		new->share = share;
@@ -41,8 +45,6 @@ t_bool	init_philo(int ac, char **av, t_list **list)
 	int		i;
 
 	i = 1;
-	if (av[1] == '0')
-		return (0);
 	if (ac != 5 && ac != 6)
 		return FALSE;
 	while (i < ac)

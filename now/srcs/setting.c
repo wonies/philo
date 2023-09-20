@@ -17,8 +17,6 @@ t_list	*ft_lstnew(int num, int idx)
 	}
 	new->info->cnt = num;
 	new->info->idx = idx;
-	new->info->lock = 0;
-	new->info->moniter = 0;
 	return (new);
 }
 

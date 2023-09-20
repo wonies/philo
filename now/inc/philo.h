@@ -35,8 +35,7 @@ typedef struct s_info
 	int 			naptime;
 	int 			option;
 	int				idx;
-	t_bool			lock;
-	t_bool			moniter;
+	int				optown;
 	unsigned long long	taken;
 	t_status		status;
 } t_info;
@@ -45,12 +44,13 @@ typedef struct s_philo
 {
 	pthread_mutex_t prints;
 	pthread_mutex_t inactive;
+	pthread_mutex_t opt;
+	int				opttotal;
 	int				start;
 	int				times;
 	int				dead;
 	unsigned long long			record;
 	unsigned long long			alive;
-	
 } t_philo;
 
 typedef struct s_list

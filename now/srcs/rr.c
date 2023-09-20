@@ -5,10 +5,8 @@ void    onephilo(t_list *list);
 t_bool  died(t_list *list, ULL timz)
 {
     ULL lives;
-    ULL cur;
 
     lives = list->info->lifetime;
-    cur = get_time();
     pthread_mutex_lock(&(list->share->inactive));
     if (list->share->dead == 1)
     {
@@ -22,8 +20,7 @@ t_bool  died(t_list *list, ULL timz)
         if (list->share->dead == 0)
         {
             pthread_mutex_lock(&(list->share->prints));
-            printf("\t\tdied time : %llu \torder : %d\n", cur - list->info->taken, list->info->idx);
-            printf("%llu %d is died\n", cur - list->info->taken, list->info->idx);
+            printf("%llu %d is died\n", get_time() - list->info->taken, list->info->idx);
             list->share->dead = 1;
             pthread_mutex_unlock(&(list->share->prints));
         }
@@ -274,7 +271,28 @@ t_bool  eveneat(t_list *list, int nrd)
         pthread_mutex_unlock(&(list->next->fork));
         return (1);
     }
-    list->info->lifetime -= 200;
+    printf("list->info->option : {%d}\n", list->info->option);
+    if (list->info->option != -1)
+    {
+        list->info->optown++;
+        printf("\t\topt own : %d\n", list->info->optown);
+        if (list->info->optown == list->info->option)
+        {
+            list->share->opttotal++;
+            printf("list->share->optional : {%d}\n", list->share->opttotal);
+            pthread_mutex_lock(&(list->share->opt));
+            if (list->share->opttotal == list->info->option)
+            {
+                pthread_mutex_lock(&(list->share->inactive));
+                list->share->dead = 1;
+                pthread_mutex_unlock(&(list->share->opt));
+                pthread_mutex_unlock(&(list->share->inactive));
+                return (1);
+            }
+            pthread_mutex_unlock(&(list->share->opt));
+        }
+    }
+    // list->info->lifetime -= 200;
     mutex(list, 0);
     mutex(list->next, 0);
     if (died(list, list->info->taken))
@@ -319,7 +337,28 @@ t_bool  oddeat(t_list *list, int nrd)
         pthread_mutex_unlock(&(list->fork));
         return (1);
     }
-    list->info->lifetime -= 200;
+    if (list->info->option != -1)
+        {
+            list->info->optown++;
+            printf("\t\topt own : %d\n", list->info->optown);
+            if (list->info->optown == list->info->option)
+            {
+                list->share->opttotal++;
+                printf("list->share->optional : {%d}\n", list->share->opttotal);
+                pthread_mutex_lock(&(list->share->opt));
+                if (list->share->opttotal == list->info->option)
+                {
+                    
+                    // pthread_mutex_lock(&(list->share->inactive));
+                    // list->share->dead = 1;
+                    // pthread_mutex_unlock(&(list->share->opt));
+                    pthread_mutex_unlock(&(list->share->inactive));
+                    return (1);
+                }
+                pthread_mutex_unlock(&(list->share->opt));
+            }
+        }
+    // list->info->lifetime -= 200;
     mutex(list->next, 0);
     mutex(list, 0);
     pthread_mutex_lock(&(list->share->inactive));
@@ -335,7 +374,7 @@ t_bool  oddeat(t_list *list, int nrd)
 
 t_bool    eat(t_list *list, int nrd)
 {
-    list->info->lifetime = 410;
+    // list->info->lifetime = 410;
     if (nrd % 2 != 0)
     {
         if (oddeat(list, nrd))
@@ -352,12 +391,9 @@ t_bool    eat(t_list *list, int nrd)
 
 void	table(t_list *list, int nrd)
 {
-	int i;
-
-    i = 0;
-    if (list->info->option != -1)
+    if (list->info->cnt % 2 == 0)
     {
-        while (i++ < list->info->option)
+        while (1)
         {
             if (eat(list, nrd))
                 return ;
@@ -367,25 +403,12 @@ void	table(t_list *list, int nrd)
     }
     else
     {
-        if (list->info->cnt % 2 == 0)
+        while (1)
         {
-            while (1)
-            {
-                if (eat(list, nrd))
-                    return ;
-                if (think(list, nrd))
-                    return ;
-            }
-        }
-        else
-        {
-            while (1)
-            {
-                if (eat(list, nrd))
-                    return ;
-                if (odd_think(list, nrd))
-                    return ;
-            }
+            if (eat(list, nrd))
+                return ;
+            if (odd_think(list, nrd))
+                return ;
         }
     }
 }

@@ -84,6 +84,10 @@ t_bool	thread(t_list **list)
 	while (1)
 	{
 		pthread_mutex_lock(&(cur->share->inactive));
+		pthread_mutex_lock(&(cur->share->opt));
+		if (cur->share->opttotal == cur->info->cnt)
+			cur->share->dead = 1;
+		pthread_mutex_unlock(&(cur->share->opt));
 		if (cur->share->dead == 1)
 		{
 			pthread_mutex_lock(&(cur->share->prints));
