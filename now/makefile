@@ -1,7 +1,8 @@
 NAME = philo
 
-CC = CC
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 RM = rm -f
 
 HEADER	=	inc/philo.h
@@ -9,7 +10,7 @@ HEADER	=	inc/philo.h
 SRCS = srcs/main.c \
 srcs/init.c \
 srcs/life.c \
-srcs/rr.c \
+srcs/rrr.c \
 srcs/setting.c \
 
 OBJS = $(SRCS:%.c=%.o)
