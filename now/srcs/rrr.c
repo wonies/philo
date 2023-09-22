@@ -9,8 +9,8 @@ t_bool  died(t_list *list, ULL timz)
     ULL lives;
 
     lives = list->info->lifetime;
-    if (amidie(list))
-		return (1);
+    // if (amidie(list))
+	// 	return (1);
     if (get_time() - timz >= lives)
     {
         pthread_mutex_lock(&(list->share->inactive));
@@ -62,12 +62,9 @@ t_bool    moniterlife(t_list *list, ULL times)
     (void )list;
     cur = get_time();
     death = list->info->taken;
-    if (list->info->idx == 1)
-        printf("death : %d \n", list->info->lifetime);
-    printf("\t\t%llu is time check :\n\n", cur - death);
     while (1)
     {
-        if (died(list, death))
+		if (died(list, death))
             return (1);
         if (get_time() - cur >= times)
             break ;
@@ -104,9 +101,13 @@ t_bool    think(t_list *list, int nrd)
     pthread_mutex_unlock(&(list->share->inactive));
 	printf("%llu %d is thinking\n", get_time() - list->share->record, nrd);
 	pthread_mutex_unlock(&(list->share->prints));
-	if (moniterlife(list, list->info->eattime - list->info->naptime))
-        return (1);
-    return (0);
+	if (moniterlife(list, (list->info->eattime - list->info->naptime)
+		* (list->info->eattime >= list->info->naptime)))
+	{
+        printf("think moniter\n");
+		return (1);
+	}
+	return (0);
 }
 
 t_bool    odd_think(t_list *list, int nrd)
@@ -122,7 +123,12 @@ t_bool    odd_think(t_list *list, int nrd)
     pthread_mutex_unlock(&(list->share->inactive));
 	printf("%llu %d is thinking\n", get_time() - list->share->record, nrd);
 	pthread_mutex_unlock(&(list->share->prints)); 
-    if (moniterlife(list, list->info->eattime * 2 - list->info->naptime))
+    // if (moniterlife(list, ((list->info->eattime * 2 - list->info->naptime)
+	// - (list->info->eattime * (list->info->idx % 2 == 1)))
+	// * (list->info->eattime >= list->info->naptime)))
+    //     return (1);
+	if (moniterlife(list, ((list->info->eattime * 2 - list->info->naptime))
+		* (list->info->eattime >= list->info->naptime)))
         return (1);
     return (0);
 }
@@ -140,6 +146,8 @@ t_bool  sleeps(t_list *list, int nrd)
 	pthread_mutex_unlock(&(list->share->prints));
     if (moniterlife(list, list->info->naptime))
         return (1);
+	if (amidie(list))
+		return (1);
     status(list, STARVE);
     return (0);
 }
@@ -158,15 +166,24 @@ t_bool	amidie(t_list *list)
 
 t_bool  eveneat(t_list *list, int nrd)
 {
-    mutex(list, 1);
+	mutex(list, 1);
     if (amidie(list))
-		return (1);
+    {
+		pthread_mutex_unlock(&(list->fork));
+        return (1);
+    }
     print_status(list, nrd, 0);
     mutex(list->next, 1);
     if (amidie(list))
-		return (1);
+    {
+		pthread_mutex_unlock(&(list->fork));
+        pthread_mutex_unlock(&(list->next->fork));
+        return (1);
+    }
     print_status(list, nrd, 1);
     status(list, EAT);
+	if (option(list))
+		return (1);
     list->info->taken = get_time();
     if (moniterlife(list, list->info->eattime))
     {
@@ -176,43 +193,42 @@ t_bool  eveneat(t_list *list, int nrd)
     }
     mutex(list, 0);
     mutex(list->next, 0);
-	if (option(list))
-		return (1);
     if (amidie(list))
 		return (1);
     status(list, SLEEP);
     return (0);
 }
 
+t_status ref_stat(t_list *list)
+{
+    t_status    result;
+
+    pthread_mutex_lock(&list->active);
+    result = list->info->status;
+    pthread_mutex_unlock(&list->active);
+    return (result);
+}
 
 t_bool	yield(t_list *list)
 {
-	pthread_mutex_lock(&(list->prev->active));
-	pthread_mutex_lock(&(list->next->active));
-	if (list->prev->info->status == STARVE && 
-	list->next->info->status == SLEEP)
+	if (ref_stat(list->prev) == STARVE && ref_stat(list->next) == SLEEP)
     {
         mutex(list, 0);
         usleep(5000);
         mutex(list, 1);
-		pthread_mutex_unlock(&(list->prev->active));
-		pthread_mutex_unlock(&(list->next->active));
 		return (1);
     }
-	pthread_mutex_unlock(&(list->prev->active));
-	pthread_mutex_unlock(&(list->next->active));
 	return (0);
 }
 
 t_bool	option(t_list *list)
 {
-	//pthread_mutex_lock(&(list->share->opt));
+	pthread_mutex_lock(&(list->share->opt));
 	if (list->info->option != -1)
 	{
 		list->info->optown++;
 		if (list->info->optown == list->info->option)
 		{
-			pthread_mutex_lock(&(list->share->opt));
 			list->share->opttotal++;
 			if (list->share->opttotal == list->info->cnt)
 			{
@@ -222,26 +238,33 @@ t_bool	option(t_list *list)
 				pthread_mutex_unlock(&(list->share->inactive));
 				return (1);
 			}
-			pthread_mutex_unlock(&(list->share->opt));
 		}
 	}
+	pthread_mutex_unlock(&(list->share->opt));
 	return (0);
 }
 
 t_bool  oddeat(t_list *list, int nrd)
 {
-    //t_bool circle = 0;
-	
 	mutex(list->next, 1);
     print_status(list, nrd, 0);
 	if (amidie(list))
-		return (1);
+    {
+		pthread_mutex_unlock(&(list->next->fork));
+        return (1);
+    }
     mutex(list, 1);
 	if (amidie(list))
-		return (1);
-	yield(list);
+    {
+		pthread_mutex_unlock(&(list->next->fork));
+        pthread_mutex_unlock(&(list->fork));
+        return (1);
+    }
+    yield(list);
     print_status(list, nrd, 1);
     status(list, EAT);
+	if (option(list))
+		return (1);
     list->info->taken = get_time();
     if (moniterlife(list, list->info->eattime))
     {
@@ -251,8 +274,6 @@ t_bool  oddeat(t_list *list, int nrd)
     }
     mutex(list->next, 0);
     mutex(list, 0);
-	if (option(list))
-		return (1);
     if (amidie(list))
 		return (1);
     status(list, SLEEP);
@@ -271,7 +292,8 @@ t_bool    eat(t_list *list, int nrd)
         if (eveneat(list, nrd))
             return (1);
     }
-    sleeps(list, nrd);
+	if (sleeps(list, nrd))
+		return (1);
     return (0);
 }
 

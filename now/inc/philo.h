@@ -31,8 +31,8 @@ typedef struct s_info
 {
 	int 			cnt;
 	int				lifetime;
-	int 			eattime;
-	int 			naptime;
+	ULL 			eattime;
+	ULL 			naptime;
 	int 			option;
 	int				idx;
 	int				optown;

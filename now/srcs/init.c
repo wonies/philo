@@ -4,6 +4,7 @@ static void		init_share(t_philo *share)
 {
 	pthread_mutex_init((&share->prints), NULL);
 	pthread_mutex_init((&share->inactive), NULL);
+	pthread_mutex_init((&share->opt), NULL);
 	share->start = 0;
 	share->times = 0;
 	share->dead = 0;
@@ -28,11 +29,9 @@ static	void	put_info(int ac, char **av, t_list **list)
 		new->info->naptime = (ULL)ft_atoi(av[4]);
 		new->info->taken = get_time();
 		new->info->status = 0;
+		new->info->optown = 0;
 		if (ac == 6)
-		{
 			new->info->option = (ULL)ft_atoi(av[5]);
-			new->info->optown = 0;
-		}
 		else
 			new->info->option = -1;
 		new->share = share;

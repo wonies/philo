@@ -30,6 +30,7 @@ t_bool	thread_join(t_list **list)
 	while (i < cur->info->cnt)
 	{
 		pthread_join(cur->niche, NULL);
+		cur = cur->next;
 		i++;
 	}
 	return (0);

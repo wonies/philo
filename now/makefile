@@ -1,8 +1,8 @@
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-# CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
+# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 RM = rm -f
 
 HEADER	=	inc/philo.h
