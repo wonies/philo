@@ -49,7 +49,7 @@ int	main(int ac, char **av)
 	t_list	*list;
 
 	list = NULL;
-	atexit(f);
+	// atexit(f);
 	if (!(validphilo(ac, av)) || !(put_info(ac, av, &list)))
 		return (1);
 	to_mutex(&list);

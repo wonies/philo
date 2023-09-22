@@ -22,7 +22,7 @@ t_bool	init_info(int ac, char **av, t_list **list, t_philo *share)
 	t_list *new;
 
 	i = 0;
-	while (i++ <= ft_atoi(av[1]))
+	while ((ULL)i++ <= (ULL)ft_atoi(av[1]))
 	{
 		new = ft_lstnew((ULL)ft_atoi(av[1]), i);
 		new->info->lifetime = (ULL)ft_atoi(av[2]);
@@ -38,6 +38,9 @@ t_bool	init_info(int ac, char **av, t_list **list, t_philo *share)
 			new->info->option = (ULL)ft_atoi(av[5]);
 			if (new->info->option <= 0)
 			{
+				free(new->info);
+				free(new->share);
+				free(new);
 				printf("\033[0;31m🍑Option must be over ZER0🍑\n");
 				return (0);
 			}

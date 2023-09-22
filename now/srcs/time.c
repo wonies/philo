@@ -1,6 +1,6 @@
 #include "../inc/philo.h"
 
-unsigned long long get_time(void)
+ULL get_time(void)
 {
 	struct timeval time;
 
@@ -24,6 +24,27 @@ t_bool    moniterlife(t_list *list, ULL times)
         if (get_time() - cur >= times)
             break ;
         usleep(256);
+    }
+    return (0);
+}
+
+t_bool  died(t_list *list, ULL timz)
+{
+    ULL lives;
+
+    lives = list->info->lifetime;
+    if (get_time() - timz >= lives)
+    {
+        pthread_mutex_lock(&(list->share->inactive));
+        if (list->share->dead == 0)
+        {
+            list->share->dead = 1;
+            pthread_mutex_lock(&(list->share->prints));
+            printf("\033[0;31m%llu %d is died\033[0;30m\n", get_time() - list->info->taken, list->info->idx);
+            pthread_mutex_unlock(&(list->share->prints));
+        }
+        pthread_mutex_unlock(&(list->share->inactive));
+        return (1);
     }
     return (0);
 }

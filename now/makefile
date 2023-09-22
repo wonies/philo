@@ -10,10 +10,13 @@ HEADER	=	inc/philo.h
 SRCS = srcs/main.c \
 srcs/init.c \
 srcs/life.c \
-srcs/rrr.c \
+srcs/table.c \
 srcs/setting.c \
 srcs/time.c \
 srcs/valid.c \
+srcs/eat.c \
+srcs/eatutil.c \
+srcs/utils.c \
 
 OBJS = $(SRCS:%.c=%.o)
 

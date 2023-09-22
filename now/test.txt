@@ -1,0 +1,147 @@
+			philo int 4
+			philo int 4
+			philo int 4
+			philo int 4
+			philo int 4
+starting philo 1
+starting philo 3
+starting philo 2
+starting philo 4
+[0;36m0 1 has taken a fork
+[0;36m0 1 has taken a fork
+[0;32m0 1 is eating[0;37m
+[0;36m0 3 has taken a fork
+[0;36m0 3 has taken a fork
+[0;32m0 3 is eating[0;37m
+[0;36m200 2 has taken a fork
+[0;36m200 2 has taken a fork
+[0;34m200 1 is sleeping
+[0;34m200 3 is sleeping
+[0;32m200 2 is eating[0;37m
+[0;36m200 4 has taken a fork
+[0;36m200 4 has taken a fork
+[0;32m200 4 is eating[0;37m
+[0;35m400 1 is thinking
+[0;36m400 1 has taken a fork
+[0;36m400 1 has taken a fork
+[0;34m400 2 is sleeping
+[0;34m400 4 is sleeping
+[0;35m400 3 is thinking
+[0;36m400 3 has taken a fork
+[0;36m400 3 has taken a fork
+[0;32m400 3 is eating[0;37m
+[0;32m405 1 is eating[0;37m
+[0;34m600 3 is sleeping
+[0;35m600 4 is thinking
+[0;35m600 2 is thinking
+[0;36m600 4 has taken a fork
+[0;36m600 4 has taken a fork
+[0;32m600 4 is eating[0;37m
+[0;36m605 2 has taken a fork
+[0;36m605 2 has taken a fork
+[0;34m605 1 is sleeping
+[0;32m605 2 is eating[0;37m
+[0;35m800 3 is thinking
+[0;36m800 3 has taken a fork
+[0;36m800 3 has taken a fork
+[0;34m800 4 is sleeping
+[0;35m805 1 is thinking
+[0;34m805 2 is sleeping
+[0;36m805 1 has taken a fork
+[0;36m805 1 has taken a fork
+[0;32m805 3 is eating[0;37m
+[0;32m811 1 is eating[0;37m
+[0;35m1000 4 is thinking
+[0;35m1005 2 is thinking
+[0;36m1005 4 has taken a fork
+[0;36m1005 4 has taken a fork
+[0;32m1005 4 is eating[0;37m
+[0;34m1005 3 is sleeping
+[0;34m1011 1 is sleeping
+[0;36m1011 2 has taken a fork
+[0;36m1011 2 has taken a fork
+[0;32m1011 2 is eating[0;37m
+[0;34m1205 4 is sleeping
+[0;35m1205 3 is thinking
+[0;36m1205 3 has taken a fork
+[0;36m1205 3 has taken a fork
+[0;35m1211 1 is thinking
+[0;36m1211 1 has taken a fork
+[0;36m1211 1 has taken a fork
+[0;32m1211 3 is eating[0;37m
+[0;34m1211 2 is sleeping
+[0;32m1217 1 is eating[0;37m
+[0;35m1405 4 is thinking
+[0;34m1411 3 is sleeping
+[0;36m1411 4 has taken a fork
+[0;36m1411 4 has taken a fork
+[0;32m1411 4 is eating[0;37m
+[0;35m1411 2 is thinking
+[0;36m1417 2 has taken a fork
+[0;36m1417 2 has taken a fork
+[0;32m1417 2 is eating[0;37m
+[0;34m1417 1 is sleeping
+[0;35m1611 3 is thinking
+[0;36m1611 3 has taken a fork
+[0;36m1611 3 has taken a fork
+[0;34m1611 4 is sleeping
+[0;35m1617 1 is thinking
+[0;36m1617 1 has taken a fork
+[0;36m1617 1 has taken a fork
+[0;32m1617 1 is eating[0;37m
+[0;32m1617 3 is eating[0;37m
+[0;34m1617 2 is sleeping
+[0;35m1811 4 is thinking
+[0;35m1817 2 is thinking
+[0;36m1817 4 has taken a fork
+[0;36m1817 4 has taken a fork
+[0;32m1817 4 is eating[0;37m
+[0;34m1817 1 is sleeping
+[0;34m1817 3 is sleeping
+[0;36m1817 2 has taken a fork
+[0;36m1817 2 has taken a fork
+[0;32m1817 2 is eating[0;37m
+[0;35m2017 1 is thinking
+[0;36m2017 1 has taken a fork
+[0;36m2017 1 has taken a fork
+[0;34m2017 2 is sleeping
+[0;34m2017 4 is sleeping
+[0;35m2017 3 is thinking
+[0;36m2017 3 has taken a fork
+[0;36m2017 3 has taken a fork
+[0;32m2017 3 is eating[0;37m
+[0;32m2022 1 is eating[0;37m
+[0;35m2217 2 is thinking
+[0;35m2217 4 is thinking
+[0;36m2217 4 has taken a fork
+[0;36m2217 4 has taken a fork
+[0;32m2217 4 is eating[0;37m
+[0;34m2217 3 is sleeping
+[0;36m2222 2 has taken a fork
+[0;36m2222 2 has taken a fork
+[0;32m2222 2 is eating[0;37m
+[0;34m2222 1 is sleeping
+[0;34m2417 4 is sleeping
+[0;35m2417 3 is thinking
+[0;36m2417 3 has taken a fork
+[0;36m2417 3 has taken a fork
+[0;35m2422 1 is thinking
+[0;36m2422 1 has taken a fork
+[0;36m2422 1 has taken a fork
+[0;32m2422 3 is eating[0;37m
+[0;34m2422 2 is sleeping
+[0;32m2428 1 is eating[0;37m
+[0;35m2617 4 is thinking
+[0;34m2622 3 is sleeping
+[0;35m2622 2 is thinking
+[0;36m2622 4 has taken a fork
+[0;36m2622 4 has taken a fork
+[0;32m2622 4 is eating[0;37m
+[0;34m2628 1 is sleeping
+[0;36m2628 2 has taken a fork
+[0;36m2628 2 has taken a fork
+[0;32m2628 2 is eating[0;37m
+[0;34m2822 4 is sleeping
+[0;35m2822 3 is thinking
+[0;36m2822 3 has taken a fork
+[0;36m2822 3 has take

@@ -81,5 +81,19 @@ t_bool	validinfo(t_list *list);
 
 t_bool  died(t_list *list, ULL timz);
 t_bool    moniterlife(t_list *list, ULL times);
+t_bool  eveneat(t_list *list, int nrd);
+t_bool  oddeat(t_list *list, int nrd);
+ULL get_time(void);
+t_bool    moniterlife(t_list *list, ULL times);
+t_bool  died(t_list *list, ULL timz);
+
+t_bool  print_act(t_list *list, int nrd, int warn);
+void    status(t_list *list, int active);
+t_bool	option(t_list *list);
+t_bool	switchoff(t_list *list);
+
+t_bool	yield(t_list *list);
+
+void    mutex(t_list *list, int onoff);
 
 # endif
