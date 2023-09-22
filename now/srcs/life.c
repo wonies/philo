@@ -1,9 +1,10 @@
 #include "../inc/philo.h"
 
 t_bool	thread(t_list **list);
-t_bool	thread_join(t_list **list);
+static t_bool	thread_join(t_list **list);
+t_bool	to_mutex(t_list **list);
 
-t_bool	mutex_init(t_list **list)
+t_bool	to_mutex(t_list **list)
 {
 	t_list	*cur = *list;
 	int		i;
@@ -20,7 +21,7 @@ t_bool	mutex_init(t_list **list)
 	return (0);
 }
 
-t_bool	thread_join(t_list **list)
+static	t_bool	thread_join(t_list **list)
 {
 	t_list	*cur;
 	int		i;
@@ -36,7 +37,7 @@ t_bool	thread_join(t_list **list)
 	return (0);
 }
 
-void	thread_odd(t_list *cur)
+static	void	thread_odd(t_list *cur)
 {
 	int	i = 1;
 	if (cur->info->cnt == 1)
@@ -53,7 +54,7 @@ void	thread_odd(t_list *cur)
 	}
 }
 
-void	thread_even(t_list *cur)
+static	void	thread_even(t_list *cur)
 {
 	int	i = 2;
 	while (i <= cur->info->cnt)
@@ -75,23 +76,14 @@ void	thread_even(t_list *cur)
 t_bool	thread(t_list **list)
 {
 	t_list	*cur;
-	// int		i;
 
 	cur = *list;
 	thread_odd(cur);
 	cur = *list;
 	thread_even(cur->next);
-	// cur = *list;
 	while (1)
 	{
 		pthread_mutex_lock(&(cur->share->inactive));
-		if (cur->info->option != -1)
-		{
-			pthread_mutex_lock(&(cur->share->opt));
-			if (cur->share->opttotal == cur->info->cnt)
-				cur->share->dead = 1;
-			pthread_mutex_unlock(&(cur->share->opt));
-		}
 		if (cur->share->dead == 1)
 		{
 			pthread_mutex_unlock(&(cur->share->inactive));
@@ -101,11 +93,5 @@ t_bool	thread(t_list **list)
 		cur = cur->next;
 	}
 	thread_join(list);
-	return (0);
-}
-
-t_bool	get_fork(t_list **list)
-{
-	mutex_init(list);
 	return (0);
 }

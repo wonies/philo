@@ -9,16 +9,14 @@ t_bool  died(t_list *list, ULL timz)
     ULL lives;
 
     lives = list->info->lifetime;
-    // if (amidie(list))
-	// 	return (1);
     if (get_time() - timz >= lives)
     {
         pthread_mutex_lock(&(list->share->inactive));
         if (list->share->dead == 0)
         {
-            pthread_mutex_lock(&(list->share->prints));
-            printf("%llu %d is died\n", get_time() - list->info->taken, list->info->idx);
             list->share->dead = 1;
+            pthread_mutex_lock(&(list->share->prints));
+            printf("\033[0;31m%llu %d is died\033[0;30m\n", get_time() - list->info->taken, list->info->idx);
             pthread_mutex_unlock(&(list->share->prints));
         }
         pthread_mutex_unlock(&(list->share->inactive));
@@ -27,51 +25,54 @@ t_bool  died(t_list *list, ULL timz)
     return (0);
 }
 
-void    print_status(t_list *list, int nrd, int behaivor)
+// void    print_status(t_list *list, int nrd, int behaivor)
+// {
+//     ULL begins;
+
+//     pthread_mutex_lock(&(list->share->prints));
+//     // pthread_mutex_lock(&(list->share->inactive));
+//     // if (list->share->dead == 1)
+//     // {
+//     //     pthread_mutex_unlock(&(list->share->prints));
+//     //     pthread_mutex_unlock(&(list->share->inactive));
+//     //     return ;
+//     // }
+//     // pthread_mutex_unlock(&(list->share->inactive));
+//     if (behaivor == 0)
+// 	{
+// 		begins = get_time() - list->share->record;
+// 		printf("%llu %d has taken a fork\n", begins, nrd);
+// 		printf("%llu %d has taken a fork\n", begins, nrd);
+// 	}
+// 	else if (behaivor == 1)
+// 	{
+// 		begins = get_time() - list->share->record;
+// 		printf("%llu %d is eating\n", get_time() - list->share->record, nrd);
+// 	}
+//     pthread_mutex_unlock(&(list->share->prints));
+// }
+
+t_bool  print_act(t_list *list, int nrd, int warn)
 {
-    ULL begins;
+    ULL rec;
 
     pthread_mutex_lock(&(list->share->prints));
-    pthread_mutex_lock(&(list->share->inactive));
-    if (list->share->dead == 1)
+    rec = get_time() - list->share->record;
+    if (warn == 0)
     {
-        pthread_mutex_unlock(&(list->share->prints));
-        pthread_mutex_unlock(&(list->share->inactive));
-        return ;
+        printf("\033[0;36m%llu %d %s\n", rec, nrd, ACT_FORK);
+        printf("\033[0;36m%llu %d %s\n", rec, nrd, ACT_FORK);
     }
-    pthread_mutex_unlock(&(list->share->inactive));
-    if (behaivor == 0)
-	{
-		begins = get_time() - list->share->record;
-		printf("%llu %d has taken a fork\n", begins, nrd);
-		printf("%llu %d has taken a fork\n", begins, nrd);
-	}
-	else if (behaivor == 1)
-	{
-		begins = get_time() - list->share->record;
-		printf("%llu %d is eating\n", get_time() - list->share->record, nrd);
-	}
+    else if (warn == 1)
+        printf("\033[0;32m%llu %d %s\033[0;37m\n", rec, nrd, ACT_EAT);
+    else if (warn == 2)
+        printf("\033[0;34m%llu %d %s\n", rec, nrd, ACT_NAP);
+    else if (warn == 3)
+        printf("\033[0;35m%llu %d %s\n", rec, nrd, ACT_THINK);
     pthread_mutex_unlock(&(list->share->prints));
+    return (1);
 }
 
-t_bool    moniterlife(t_list *list, ULL times)
-{
-    ULL cur;
-    ULL death;
-
-    (void )list;
-    cur = get_time();
-    death = list->info->taken;
-    while (1)
-    {
-		if (died(list, death))
-            return (1);
-        if (get_time() - cur >= times)
-            break ;
-        usleep(256);
-    }
-    return (0);
-}
 
 void    mutex(t_list *list, int onoff)
 {
@@ -172,7 +173,8 @@ t_bool  eveneat(t_list *list, int nrd)
 		pthread_mutex_unlock(&(list->fork));
         return (1);
     }
-    print_status(list, nrd, 0);
+    // print_status(list, nrd, 0);
+    print_act(list, nrd, 0);
     mutex(list->next, 1);
     if (amidie(list))
     {
@@ -180,7 +182,8 @@ t_bool  eveneat(t_list *list, int nrd)
         pthread_mutex_unlock(&(list->next->fork));
         return (1);
     }
-    print_status(list, nrd, 1);
+    // print_status(list, nrd, 1);
+    print_act(list, nrd, 1);
     status(list, EAT);
 	if (option(list))
 		return (1);
@@ -247,8 +250,9 @@ t_bool	option(t_list *list)
 t_bool  oddeat(t_list *list, int nrd)
 {
 	mutex(list->next, 1);
-    print_status(list, nrd, 0);
-	if (amidie(list))
+    //print_status(list, nrd, 0);
+	print_act(list, nrd, 0);
+    if (amidie(list))
     {
 		pthread_mutex_unlock(&(list->next->fork));
         return (1);
@@ -261,7 +265,8 @@ t_bool  oddeat(t_list *list, int nrd)
         return (1);
     }
     yield(list);
-    print_status(list, nrd, 1);
+    // print_status(list, nrd, 1);
+    print_act(list, nrd, 1);
     status(list, EAT);
 	if (option(list))
 		return (1);
@@ -324,7 +329,7 @@ void	table(t_list *list, int nrd)
 void    onetable(t_list *list)
 {
     pthread_mutex_lock(&(list->share->prints));
-    printf("%llu %d has taken a fork", get_time()-list->info->taken, list->info->idx);
+    printf("\033[0;32m%llu %d has taken a fork\n", get_time()-list->info->taken, list->info->idx);
 	pthread_mutex_unlock(&(list->share->prints));
     moniterlife(list, list->info->lifetime);
 }

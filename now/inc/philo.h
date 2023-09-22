@@ -7,18 +7,19 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-// #define STARVE 
-// #define EAT
-// #define SLEEP
-
 #define ULL unsigned long long
+
+# define ACT_FORK	"has taken a fork"
+# define ACT_EAT	"is eating"
+# define ACT_NAP	"is sleeping"
+# define ACT_THINK	"is thinking"
+# define ACT_DIE	"died"
 
 typedef enum e_status
 {
 	STARVE,
 	EAT,
 	SLEEP,
-	DEATH,
 } t_status;
 
 typedef enum e_bool
@@ -36,8 +37,8 @@ typedef struct s_info
 	int 			option;
 	int				idx;
 	int				optown;
-	unsigned long long	taken;
 	t_status		status;
+	ULL				taken;
 } t_info;
 
 typedef struct s_philo
@@ -46,11 +47,8 @@ typedef struct s_philo
 	pthread_mutex_t inactive;
 	pthread_mutex_t opt;
 	int				opttotal;
-	int				start;
-	int				times;
 	int				dead;
-	unsigned long long			record;
-	unsigned long long			alive;
+	ULL				record;
 } t_philo;
 
 typedef struct s_list
@@ -75,6 +73,13 @@ unsigned long long get_time(void);
 t_bool	get_fork(t_list **list);
 unsigned long long get_time(void);
 void	*routine(void *arg);
-t_bool	init_philo(int ac, char **av, t_list **list);
 t_bool	get_fork(t_list **list);
+t_bool	to_mutex(t_list **list);
+t_bool	put_info(int ac, char **av, t_list **list);
+t_bool	validphilo(int ac, char **av);
+t_bool	validinfo(t_list *list);
+
+t_bool  died(t_list *list, ULL timz);
+t_bool    moniterlife(t_list *list, ULL times);
+
 # endif

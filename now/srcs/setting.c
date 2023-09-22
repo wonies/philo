@@ -12,6 +12,7 @@ t_list	*ft_lstnew(int num, int idx)
 	new->info = (t_info *)malloc(sizeof(t_info));
 	if (!new->info)
 	{
+		free(new->info);
 		free(new);
 		return (NULL);
 	}

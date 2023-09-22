@@ -1,27 +1,28 @@
 #include "../inc/philo.h"
 
-static void		init_share(t_philo *share)
+static t_bool		init_share(t_philo *share)
 {
-	pthread_mutex_init((&share->prints), NULL);
-	pthread_mutex_init((&share->inactive), NULL);
-	pthread_mutex_init((&share->opt), NULL);
-	share->start = 0;
-	share->times = 0;
+	if (pthread_mutex_init((&share->prints), NULL) != 0 ||
+	pthread_mutex_init((&share->inactive), NULL) != 0 ||
+	pthread_mutex_init((&share->opt), NULL) != 0)
+	{
+		free(share);
+		printf("\033[0;31mFailed to Init thread MUTEX\n");
+		return (0);
+	}
 	share->dead = 0;
 	share->record = get_time();
 	share->opttotal = 0;
+	return (1);
 }
 
-static	void	put_info(int ac, char **av, t_list **list)
+t_bool	init_info(int ac, char **av, t_list **list, t_philo *share)
 {
-	int		i;
-	t_list	*new;
-	t_philo *share;
+	int	i;
+	t_list *new;
 
 	i = 0;
-	share = (t_philo *)malloc(sizeof(t_philo));
-	init_share(share);
-	while (i++ < ft_atoi(av[1]))
+	while (i++ <= ft_atoi(av[1]))
 	{
 		new = ft_lstnew((ULL)ft_atoi(av[1]), i);
 		new->info->lifetime = (ULL)ft_atoi(av[2]);
@@ -30,37 +31,35 @@ static	void	put_info(int ac, char **av, t_list **list)
 		new->info->taken = get_time();
 		new->info->status = 0;
 		new->info->optown = 0;
+		if (!(validinfo(new)))
+			return (0);
 		if (ac == 6)
+		{
 			new->info->option = (ULL)ft_atoi(av[5]);
+			if (new->info->option <= 0)
+			{
+				printf("\033[0;31m🍑Option must be over ZER0🍑\n");
+				return (0);
+			}
+		}
 		else
 			new->info->option = -1;
 		new->share = share;
 		insert_list(list, new);
 	}
-}
-
-t_bool	init_philo(int ac, char **av, t_list **list)
-{
-	int		i;
-
-	i = 1;
-	if (ac != 5 && ac != 6)
-		return FALSE;
-	while (i < ac)
-	{
-		if (!av[i])
-			return (FALSE);
-		i++;
-	}
-	put_info(ac, av, list);
 	return (1);
 }
 
-unsigned long long get_time(void)
+t_bool	put_info(int ac, char **av, t_list **list)
 {
-	struct timeval time;
+	t_philo *share;
 
-	if (gettimeofday(&time, NULL) < 0)
-		return -1;
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	share = (t_philo *)malloc(sizeof(t_philo));
+	if (!share)
+		return (0);
+	if(!init_share(share))
+		return (0);
+	if (!init_info(ac, av, list, share))
+		return (0);
+	return (1);
 }
