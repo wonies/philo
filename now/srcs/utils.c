@@ -8,22 +8,22 @@ t_bool  print_act(t_list *list, int nrd, int warn)
         return (0);
     pthread_mutex_lock(&(list->share->prints));
     rec = get_time() - list->share->record;
-    printf("rec : %llu\n", rec);
+    // printf("rec : %llu\n", rec);
     if (warn == 0)
     {
-        // printf("\033[0;36m%llu %d %s\n", rec, nrd, ACT_FORK);
+        //printf("\033[0;36m%llu %d %s\n", rec, nrd, ACT_FORK);
         // printf("\033[0;36m%llu %d %s\n", rec, nrd, ACT_FORK);
         printf("%llu %d %s\n", rec, nrd, ACT_FORK);
         printf("%llu %d %s\n", rec, nrd, ACT_FORK);
     }
     else if (warn == 1)
-        printf("%llu %d %s\033[0;37m\n", rec, nrd, ACT_EAT);
-        // printf("\033[0;32m%llu %d %s\033[0;37m\n", rec, nrd, ACT_EAT);
+        printf("%llu %d %s\n", rec, nrd, ACT_EAT);
+        //printf("\033[0;32m%llu %d %s\033[0;37m\n", rec, nrd, ACT_EAT);
     else if (warn == 2)
         printf("%llu %d %s\n", rec, nrd, ACT_NAP);
-        // printf("\033[0;34m%llu %d %s\n", rec, nrd, ACT_NAP);
+        //printf("\033[0;34m%llu %d %s\n", rec, nrd, ACT_NAP);
     else if (warn == 3)
-        printf("\033[0;35m%llu %d %s\n", rec, nrd, ACT_THINK);
+        printf("%llu %d %s\n", rec, nrd, ACT_THINK);
     pthread_mutex_unlock(&(list->share->prints));
     return (1);
 }
@@ -46,10 +46,10 @@ t_bool	option(t_list *list)
 			list->share->opttotal++;
 			if (list->share->opttotal == list->info->cnt)
 			{
-				pthread_mutex_unlock(&(list->share->opt));
 				pthread_mutex_lock(&(list->share->inactive));
 				list->share->dead = 1;
 				pthread_mutex_unlock(&(list->share->inactive));
+				pthread_mutex_unlock(&(list->share->opt));
 				return (1);
 			}
 		}

@@ -47,7 +47,6 @@ static	void	thread_odd(t_list *cur)
 	}
 	while (i < cur->info->cnt)
 	{
-		printf("starting philo %d\n", i);
 		pthread_create(&cur->niche, NULL, &routine, cur);
 		i += 2;
 		cur = cur->next->next;
@@ -59,14 +58,12 @@ static	void	thread_even(t_list *cur)
 	int	i = 2;
 	while (i <= cur->info->cnt)
 	{
-		printf("starting philo %d\n", i);
 		pthread_create(&cur->niche, NULL, &routine, cur);
 		i += 2;
 		cur = cur->next->next;
 	}
 	if (cur->info->cnt > 1 && cur->info->cnt % 2 != 0)
 	{
-		printf("starting philo %d\n", i - 1);
 		cur = cur->prev;
 		usleep(cur->info->eattime * 1000);
 		pthread_create(&cur->niche, NULL, &routine, cur);

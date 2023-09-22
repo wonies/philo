@@ -36,7 +36,7 @@ t_bool	init_info(int ac, char **av, t_list **list, t_philo *share)
 		if (ac == 6)
 		{
 			new->info->option = (ULL)ft_atoi(av[5]);
-			if (new->info->option <= 0)
+			if (new->info->option == 0)
 			{
 				free(new->info);
 				free(new->share);

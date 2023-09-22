@@ -21,4 +21,3 @@ t_bool	yield(t_list *list)
     }
 	return (0);
 }
-

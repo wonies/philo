@@ -35,11 +35,11 @@ void	freeres(t_list **list)
 		tmp = cur;
 		free(tmp->info);
 		free(tmp);
+		free(tmp->share);
 		cur = cur->next;
 		if (cur == rec)
 			break ;
 	}
-	free(cur->share);
 	*list = NULL;
 }
 
