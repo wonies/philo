@@ -65,7 +65,7 @@ typedef struct s_list
 
 int	ft_atoi(const char *str);
 
-t_list	*ft_lstnew(int num, int idx);
+t_list	*ft_lstnew(int num, int idx, char **av);
 void	insert_list(t_list** head, t_list *new_node);
 void	print_list(t_list **head);
 int		ft_lstsize(t_list **lst);

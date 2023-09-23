@@ -12,8 +12,8 @@ t_bool	to_mutex(t_list **list)
 	i = 0;
 	while (i < cur->info->cnt)
 	{
-		pthread_mutex_init(&cur->fork, NULL);
-		pthread_mutex_init(&cur->active, NULL);
+		if (pthread_mutex_init(&cur->fork, NULL) != 0 || \
+		pthread_mutex_init(&cur->active, NULL))
 		cur = cur->next;
 		i++;
 	}
@@ -80,7 +80,8 @@ t_bool	thread(t_list **list)
 	thread_even(cur->next);
 	while (1)
 	{
-		pthread_mutex_lock(&(cur->share->inactive));
+		if (pthread_mutex_lock(&(cur->share->inactive)) != 0)
+			return (0);
 		if (cur->share->dead == 1)
 		{
 			pthread_mutex_unlock(&(cur->share->inactive));
@@ -90,5 +91,5 @@ t_bool	thread(t_list **list)
 		cur = cur->next;
 	}
 	thread_join(list);
-	return (0);
+	return (1);
 }

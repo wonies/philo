@@ -15,7 +15,7 @@ t_bool	yield(t_list *list)
 	if (ref_stat(list->prev) == STARVE && ref_stat(list->next) == SLEEP)
     {
         mutex(list, 0);
-        usleep(5000);
+        usleep(1000);
         mutex(list, 1);
 		return (1);
     }

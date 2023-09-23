@@ -1,6 +1,6 @@
 #include "../inc/philo.h"
 
-t_list	*ft_lstnew(int num, int idx)
+t_list	*ft_lstnew(int num, int idx, char **av)
 {
 	t_list	*new;
 
@@ -17,8 +17,13 @@ t_list	*ft_lstnew(int num, int idx)
 		return (NULL);
 	}
 	new->info->cnt = num;
-	printf("\t\t\tphilo int %d\n", new->info->cnt);
 	new->info->idx = idx;
+	new->info->lifetime = (ULL)ft_atoi(av[2]);
+	new->info->eattime = (ULL)ft_atoi(av[3]);
+	new->info->naptime = (ULL)ft_atoi(av[4]);
+	new->info->taken = get_time();
+	new->info->status = 0;
+	new->info->optown = 0;
 	return (new);
 }
 

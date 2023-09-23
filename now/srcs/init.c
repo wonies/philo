@@ -24,13 +24,13 @@ t_bool	init_info(int ac, char **av, t_list **list, t_philo *share)
 	i = 0;
 	while ((ULL)i++ <= (ULL)ft_atoi(av[1]))
 	{
-		new = ft_lstnew((ULL)ft_atoi(av[1]), i);
-		new->info->lifetime = (ULL)ft_atoi(av[2]);
-		new->info->eattime = (ULL)ft_atoi(av[3]);
-		new->info->naptime = (ULL)ft_atoi(av[4]);
-		new->info->taken = get_time();
-		new->info->status = 0;
-		new->info->optown = 0;
+		new = ft_lstnew((ULL)ft_atoi(av[1]), i, av);
+		// new->info->lifetime = (ULL)ft_atoi(av[2]);
+		// new->info->eattime = (ULL)ft_atoi(av[3]);
+		// new->info->naptime = (ULL)ft_atoi(av[4]);
+		// new->info->taken = get_time();
+		// new->info->status = 0;
+		// new->info->optown = 0;
 		if (!(validinfo(new)))
 			return (0);
 		if (ac == 6)
